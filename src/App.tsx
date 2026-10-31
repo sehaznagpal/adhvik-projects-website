@@ -10,7 +10,7 @@ import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { Contact } from './pages/Contact';
 import { Loader } from './components/Loader';
-import { HERO_IMAGES } from './pages/Home';
+import { HERO_IMAGES } from './components/Hero';
 import { TAGLINE, SITE_NAME } from './data/brand';
 
 const INTRO_KEY = 'adhvik-intro-seen';

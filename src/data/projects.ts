@@ -31,21 +31,6 @@ export const WORKSHOP_IMAGES = [
   },
 ];
 
-/**
- * Hero crossfade. Only images 1000px wide or larger belong here.
- * wardrobe-gwalior-01 (422px), mi-arcus-01 (722px) and the workshop photos (800px or less) are too small.
- */
-export const HERO_FEATURED_PHOTOS = [
-  {
-    src: "/images/anytime-fitness-karol-bagh-01.jpg",
-    alt: "Anytime Fitness, Karol Bagh, Delhi, gym floor",
-  },
-  {
-    src: "/images/kuber-01.jpg",
-    alt: "Kuber store interior",
-  },
-];
-
 export const SERVICES = [
   "Site survey, analysis, land acquisition and liaison with agencies",
   "Theme-based design and drawings",
