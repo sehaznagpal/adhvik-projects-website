@@ -531,20 +531,17 @@ html.dark .client-card { box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
 }
 
 /* Gallery: masonry columns, 3 / 2 / 1, 16px gaps */
-.gallery-grid { column-count: 1; column-gap: 16px; }
-@media (min-width: 640px) { .gallery-grid { column-count: 2; } }
-@media (min-width: 1024px) { .gallery-grid { column-count: 3; } }
+.gallery-rows { width: 100%; }
+.gallery-row { display: flex; gap: 12px; margin-bottom: 12px; }
 .gallery-tile {
   position: relative;
   display: block;
-  width: 100%;
-  margin: 0 0 16px;
+  flex: none;
   padding: 0;
   border: 0;
   background: none;
   text-align: left;
   cursor: pointer;
-  break-inside: avoid;
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 700ms ease, transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -571,53 +568,86 @@ html.dark .client-card { box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
   .gallery-tile { opacity: 1; transform: none; transition: none; }
 }
 
-/* Footer (maroon panel in both themes) */
-.footer-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-height: 150px;
-  padding: 24px;
-  border-radius: 20px;
-  border: 1px solid rgba(244, 241, 234, 0.12);
-  background: rgba(244, 241, 234, 0.06);
-  color: #F4F1EA;
+/* Pill button in the normal theme colours */
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--text-color) 40%, transparent);
+  background: transparent;
+  color: var(--text-color);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  line-height: 1;
   cursor: pointer;
-  transition: transform 200ms ease, background-color 200ms ease, border-color 200ms ease;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
 }
-.footer-card:hover,
-.footer-card:focus-visible,
-.footer-card:focus-within {
-  transform: translateY(-4px);
-  background: rgba(244, 241, 234, 0.10);
-  border-color: rgba(244, 241, 234, 0.30);
+.pill-btn:hover,
+.pill-btn:focus-visible {
+  background: var(--text-color);
+  color: var(--bg-color);
+  border-color: var(--text-color);
 }
-.footer-card:focus-visible { outline: 2px solid #E7A9AC; outline-offset: 2px; }
-.footer-card-hit { position: absolute; inset: 0; border-radius: 20px; background: none; border: 0; cursor: pointer; }
-.footer-card-hit:focus-visible { outline: 2px solid #E7A9AC; outline-offset: 2px; }
-.footer-card-label { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(244, 241, 234, 0.65); }
-.footer-card-value { font-size: 17px; line-height: 1.4; color: #F4F1EA; font-variant-numeric: lining-nums; }
-.footer-card-arrow { position: absolute; top: 24px; right: 24px; color: #F4F1EA; transition: transform 200ms ease; }
-.footer-card:hover .footer-card-arrow,
-.footer-card:focus-visible .footer-card-arrow,
-.footer-card:focus-within .footer-card-arrow { transform: translate(4px, -4px); }
-.footer-card-link {
-  position: relative; z-index: 1; align-self: flex-start; margin-top: auto;
-  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: rgba(244, 241, 234, 0.65); text-decoration: underline; text-underline-offset: 4px;
-  transition: color 200ms ease;
+.pill-btn:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 3px; }
+
+/* Footer: plain and spacious */
+.footer-heading {
+  margin: 0;
+  font-size: clamp(40px, 6vw, 96px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
 }
-.footer-card-link:hover, .footer-card-link:focus-visible { color: #F4F1EA; }
-.footer-card-inline { text-decoration: none; transition: color 200ms ease; align-self: flex-start; }
-.footer-card-inline:hover, .footer-card-inline:focus-visible { color: #E7A9AC; }
-.footer-link { color: rgba(244, 241, 234, 0.65); transition: color 200ms ease; background: none; border: 0; padding: 0; cursor: pointer; }
-.footer-link:hover, .footer-link:focus-visible { color: #F4F1EA; }
-.footer-link:focus-visible { outline: 2px solid #E7A9AC; outline-offset: 4px; }
-.footer-bigmark { position: relative; color: rgba(244, 241, 234, 0.10); transition: color 300ms ease; }
-.footer-bigmark:hover { color: rgba(244, 241, 234, 0.18); }
+.footer-cta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3em;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  font-optical-sizing: auto;
+  letter-spacing: 0;
+  color: var(--accent-color);
+  transition: color 250ms ease;
+}
+.footer-cta-arrow {
+  width: 0.62em;
+  height: 0.62em;
+  flex: none;
+  transition: transform 250ms ease;
+}
+.footer-cta:hover,
+.footer-cta:focus-visible { color: var(--text-color); }
+.footer-cta:hover .footer-cta-arrow,
+.footer-cta:focus-visible .footer-cta-arrow { transform: translate(6px, -6px); }
+.footer-cta:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 6px; border-radius: 4px; }
+.footer-line {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--text-color);
+  font-variant-numeric: lining-nums;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-align: inherit;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 1px;
+  transition: background-size 250ms ease;
+}
+.footer-line:hover,
+.footer-line:focus-visible { background-size: 100% 1px; }
+.footer-line:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 4px; }
 @media (prefers-reduced-motion: reduce) {
-  .footer-card:hover, .footer-card:focus-visible, .footer-card:focus-within { transform: none; }
-  .footer-card:hover .footer-card-arrow, .footer-card:focus-visible .footer-card-arrow, .footer-card:focus-within .footer-card-arrow { transform: none; }
-  .footer-card, .footer-card-arrow { transition: background-color 200ms ease, border-color 200ms ease; }
+  .footer-cta:hover .footer-cta-arrow,
+  .footer-cta:focus-visible .footer-cta-arrow { transform: none; }
+  .footer-cta-arrow { transition: none; }
 }

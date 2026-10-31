@@ -140,7 +140,7 @@ export default function App() {
       </div>
 
       {/* Footer on every page */}
-      <Footer onNavigate={navigate} />
+      <Footer />
     </div>
   );
 }
