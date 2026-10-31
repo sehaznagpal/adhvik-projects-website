@@ -1,58 +1,122 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { SERVICES, TEAM_ROLES, WORKSHOP_IMAGES } from '../data/projects';
+import { Compass, Hammer, Layers, Zap, Wrench } from 'lucide-react';
+import { SERVICE_GROUPS, TEAM_PHASES, WORKSHOP_IMAGES } from '../data/projects';
 import { Lightbox } from '../components/Lightbox';
+
+const STEPS = [
+  { n: '01', title: 'Plan', text: 'Every project starts with research: the site, the brand and the people who will use the space.' },
+  { n: '02', title: 'Design', text: 'Modern, contemporary spaces that are simple, useful and right for their location.' },
+  { n: '03', title: 'Build', text: 'Our own workshop and execution teams take every project from concept to handover, under one roof.' },
+];
+
+const STATS = [
+  { value: 2013, suffix: '', label: 'Founded' },
+  { value: 900, suffix: '+', label: 'Projects delivered' },
+  { value: 20, suffix: '', label: 'States across India' },
+  { value: 2, suffix: '', label: 'International markets (UAE & Saudi Arabia)' },
+];
+
+const CAPABILITIES = ['Design', 'Fabrication', 'Civil works', 'MEP', 'Fit-out', 'In-house workshop'];
+
+const ICONS: Record<string, React.ElementType> = {
+  compass: Compass,
+  hammer: Hammer,
+  layers: Layers,
+  zap: Zap,
+  wrench: Wrench,
+};
+
+const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/** Adds `is-in` to the element, and to its [data-reveal] children, the first time it scrolls into view. */
+function useReveal<T extends HTMLElement>(threshold = 0.15) {
+  const ref = useRef<T>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const show = () => {
+      el.classList.add('is-in');
+      el.querySelectorAll('[data-reveal]').forEach((c) => c.classList.add('is-in'));
+    };
+    if (prefersReducedMotion() || !('IntersectionObserver' in window)) {
+      show();
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          show();
+          io.disconnect();
+        }
+      },
+      { threshold }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [threshold]);
+  return ref;
+}
 
 export const About: React.FC = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
+  const heroRef = useRef<HTMLElement>(null);
+  const stepsRef = useReveal<HTMLDivElement>(0.1);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const teamRef = useReveal<HTMLDivElement>(0.05);
+  const servicesRef = useReveal<HTMLDivElement>(0.05);
+  const [counts, setCounts] = useState<number[]>(() =>
+    prefersReducedMotion() ? STATS.map((s) => s.value) : STATS.map(() => 0)
+  );
 
-  // Count-up stats state
-  const [countYears, setCountYears] = useState(0);
-  const [countProjects, setCountProjects] = useState(0);
-  const statsCardRef = useRef<HTMLDivElement | null>(null);
-  const hasAnimatedStats = useRef(false);
-
+  // The page colours follow the maroon hero (so the header turns off-white over it), then ease back
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-      setCountYears(2013);
-      setCountProjects(900);
-      return;
-    }
+    const root = document.documentElement;
+    const hero = heroRef.current;
+    if (!hero) return;
+    const reduced = prefersReducedMotion();
+    if (reduced) root.classList.add('shift-fade');
+    const update = () => {
+      const header = parseFloat(getComputedStyle(root).getPropertyValue('--header-height')) || 64;
+      const over = hero.getBoundingClientRect().bottom - header;
+      root.style.setProperty('--shift', (reduced ? (over > 0 ? 1 : 0) : Math.min(Math.max(over / 80, 0), 1)).toFixed(3));
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+      root.classList.remove('shift-fade');
+      root.style.removeProperty('--shift');
+    };
+  }, []);
 
-    const observer = new IntersectionObserver(
+  // Count the stats up once, when they scroll into view
+  useEffect(() => {
+    const el = statsRef.current;
+    if (!el || prefersReducedMotion()) return;
+    let raf = 0;
+    const io = new IntersectionObserver(
       (entries) => {
-        const entry = entries[0];
-        if (entry.isIntersecting && !hasAnimatedStats.current) {
-          hasAnimatedStats.current = true;
-          const duration = 1200; // 1.2s
-          const startTime = performance.now();
-
-          const animate = (currentTime: number) => {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            // Ease-out cubic
-            const ease = 1 - Math.pow(1 - progress, 3);
-
-            setCountYears(Math.round(ease * 2013));
-            setCountProjects(Math.round(ease * 900));
-
-            if (progress < 1) {
-              requestAnimationFrame(animate);
-            }
-          };
-
-          requestAnimationFrame(animate);
-        }
+        if (!entries[0].isIntersecting) return;
+        io.disconnect();
+        const start = performance.now();
+        const tick = (now: number) => {
+          const t = Math.min((now - start) / 1400, 1);
+          const ease = 1 - Math.pow(1 - t, 3);
+          setCounts(STATS.map((s) => Math.round(s.value * ease)));
+          if (t < 1) raf = requestAnimationFrame(tick);
+        };
+        raf = requestAnimationFrame(tick);
       },
-      { threshold: 0.2 }
+      { threshold: 0.3 }
     );
-
-    if (statsCardRef.current) {
-      observer.observe(statsCardRef.current);
-    }
-
-    return () => observer.disconnect();
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   const openLightbox = (index: number) => {
@@ -61,176 +125,150 @@ export const About: React.FC = () => {
   };
 
   return (
-    <main className="w-full pt-24 sm:pt-28 md:pt-36 pb-24 md:pb-36 transition-colors duration-300">
-      <div className="max-w-[1440px] mx-auto px-5 md:px-10 lg:px-14">
-        {/* Section Header */}
-        <div className="mb-12 md:mb-16">
-          <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent-color)] block mb-3">
-            About · Turnkey Solutions
-          </span>
-          <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.02em] text-[var(--text-color)] leading-[0.92]">
-            We design spaces, <br className="hidden sm:inline" />
-            then we build them.
+    <main className="w-full">
+      {/* HERO (maroon in both themes) */}
+      <section ref={heroRef} className="about-hero">
+        <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-14">
+          <span className="about-hero-label">About Adhvik Projects</span>
+          <h1 className="section-heading about-hero-title">
+            We design spaces,<br className="hidden md:inline" /> then we build them.
           </h1>
-        </div>
+          <p className="about-hero-lead">
+            Founded in Delhi in 2013 by Mr. Nagpal, Adhvik Projects is a project management company delivering turnkey
+            spaces across India and the Middle East.
+          </p>
 
-        {/* Editorial Body Copy & Highlights */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 pb-20 md:pb-28 border-b border-[var(--border-color)]">
-          <div className="lg:col-span-8 space-y-6 md:space-y-8 text-base sm:text-lg md:text-xl text-[var(--text-color)] leading-relaxed font-normal">
-            <p>
-              Adhvik Projects was founded in Delhi in 2013 by Mr. Nagpal. Since then we've grown
-              into a design-and-build practice working across North India and beyond, with over 900
-              projects completed across 20 states and work delivered in the UAE and Saudi Arabia.
-            </p>
-            <p>
-              Our work spans high-end retail stores, premium residences, restaurants, hotels and cafeterias,
-              banquet halls, gyms, corporate offices and exhibitions. Every project starts
-              with research: understanding the site, the brand and the people who'll use the space.
-              Our approach is modern and contemporary: simple, useful spaces that respond to local
-              conditions and culture.
-            </p>
-            <p className="text-[var(--muted-color)]">
-              Because we run our own furniture workshop and execution teams, we can take a project
-              from concept to completion under one roof: one team, one point of accountability.
-            </p>
-          </div>
-
-          {/* Key Facts / Studio Credentials with Count-Up Stats */}
-          <div
-            ref={statsCardRef}
-            className="lg:col-span-4 bg-[var(--surface-color)] border border-[var(--border-color)] p-8 md:p-10 flex flex-col justify-between transition-colors duration-300"
-          >
-            <div>
-              <span className="text-xs uppercase tracking-[0.08em] text-[var(--muted-color)] font-medium block mb-6">
-                Practice Overview
-              </span>
-              <dl className="space-y-6 divide-y divide-[var(--border-color)]">
-                <div className="pt-2">
-                  <dt className="text-xs uppercase tracking-[0.08em] text-[var(--muted-color)]">
-                    Established
-                  </dt>
-                  <dd className="font-heading text-3xl md:text-4xl font-bold tracking-[0em] text-[var(--text-color)] tabular-nums">
-                    {countYears || 2013}
-                  </dd>
-                </div>
-                <div className="pt-4">
-                  <dt className="text-xs uppercase tracking-[0.08em] text-[var(--muted-color)]">
-                    Projects Delivered
-                  </dt>
-                  <dd className="font-heading text-3xl md:text-4xl font-bold tracking-[0em] text-[var(--text-color)] tabular-nums">
-                    {countProjects || 900}+
-                  </dd>
-                </div>
-                <div className="pt-4">
-                  <dt className="text-xs uppercase tracking-[0.08em] text-[var(--muted-color)]">
-                    Geographic Reach
-                  </dt>
-                  <dd className="text-sm font-medium text-[var(--text-color)] mt-1">
-                    20 Indian States · UAE · Saudi Arabia
-                  </dd>
-                </div>
-                <div className="pt-4">
-                  <dt className="text-xs uppercase tracking-[0.08em] text-[var(--muted-color)]">
-                    Capabilities
-                  </dt>
-                  <dd className="text-sm font-medium text-[var(--text-color)] mt-1">
-                    Turnkey Solutions · In-house Workshop
-                  </dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-        </div>
-
-        {/* SERVICES SECTION */}
-        <section className="py-20 md:py-28 border-b border-[var(--border-color)]">
-          <div className="mb-10 md:mb-14">
-            <span className="eyebrow">End-to-End Capabilities</span>
-            <h2 className="section-heading">
-              Services
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
-            {SERVICES.map((service, index) => (
-              <div
-                key={index}
-                className="py-4 border-b border-[var(--border-color)] flex items-baseline gap-4"
-              >
-                <span className="font-mono text-xs text-[var(--muted-color)] font-medium">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-                <span className="text-sm md:text-base text-[var(--text-color)] font-medium leading-snug">
-                  {service}
-                </span>
+          <div ref={stepsRef} className="about-steps">
+            {STEPS.map((s, i) => (
+              <div key={s.n} data-reveal className="about-step reveal" style={{ ['--d' as string]: `${i * 100}ms` }}>
+                <span className="about-step-num">{s.n}</span>
+                <h2 className="about-step-title">{s.title}</h2>
+                <p className="about-step-text">{s.text}</p>
               </div>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* THE TEAM SECTION */}
-        <section className="py-16 md:py-24 border-b border-[var(--border-color)]">
-          <div className="mb-8">
-            <span className="eyebrow">Cross-Functional Expertise</span>
-            <h2 className="section-heading">
-              The Team
-            </h2>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm sm:text-base md:text-lg text-[var(--text-color)] font-medium">
-            {TEAM_ROLES.map((role, idx) => (
-              <React.Fragment key={role}>
-                <span className="hover:text-[var(--accent-color)] transition-colors">{role}</span>
-                {idx < TEAM_ROLES.length - 1 && (
-                  <span className="text-[var(--muted-color)]" aria-hidden="true">·</span>
-                )}
-              </React.Fragment>
+      {/* STATS BAND */}
+      <section className="border-b border-[var(--border-color)] py-14 md:py-20">
+        <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-14">
+          <div ref={statsRef} className="stats">
+            {STATS.map((s, i) => (
+              <div key={s.label} className="stat">
+                <div className="stat-num">
+                  {counts[i]}
+                  {s.suffix}
+                </div>
+                <div className="stat-label">{s.label}</div>
+              </div>
             ))}
           </div>
-        </section>
+          <ul className="m-0 mt-12 flex list-none flex-wrap justify-center gap-3 p-0">
+            {CAPABILITIES.map((c) => (
+              <li key={c} className="cap-chip">
+                {c}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
-        {/* OUR WORKSHOP SECTION */}
-        <section className="pt-20 md:pt-28">
+      <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-14">
+        {/* OUR WORKSHOP */}
+        <section className="py-20 md:py-28">
           <div className="mb-10 md:mb-14">
             <span className="eyebrow">Fabrication Facility</span>
-            <h2 className="section-heading">
-              Our Workshop
-            </h2>
-            <p className="text-sm md:text-base text-[var(--muted-color)]">
-              Furniture and fixtures, built in our own workshop.
-            </p>
+            <h2 className="section-heading">Our Workshop</h2>
+            <p className="mt-4 text-base text-[var(--muted-color)]">Furniture and fixtures, built in our own workshop.</p>
           </div>
 
-          {/* Workshop photo grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
             {WORKSHOP_IMAGES.map((item, index) => (
               <button
                 key={item.src}
+                type="button"
                 onClick={() => openLightbox(index)}
-                className="group text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-color)]"
+                className="cap-host group text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-color)]"
                 aria-label={`View workshop photo: ${item.caption}`}
               >
-                <div className="aspect-[4/3] bg-[var(--surface-color)] overflow-hidden relative">
+                <div className="relative aspect-[4/3] overflow-hidden bg-[var(--surface-color)]">
                   <img
                     src={item.src}
                     alt={item.alt}
                     loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                    className="h-full w-full object-cover transition-transform duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03] motion-reduce:transform-none motion-reduce:transition-none"
                   />
-                </div>
-                <div className="mt-2.5 flex items-center justify-between text-xs text-[var(--muted-color)]">
-                  <span className="font-medium text-[var(--text-color)] group-hover:text-[var(--accent-color)] transition-colors">
-                    {item.caption}
+                  <span className="cap-overlay" aria-hidden="true">
+                    <span className="cap-name">{item.caption}</span>
                   </span>
-                  <span>0{index + 1}</span>
+                  <span className="cap-pill" aria-hidden="true">{item.caption}</span>
                 </div>
               </button>
             ))}
           </div>
         </section>
+
+        {/* THE TEAM */}
+        <section className="border-t border-[var(--border-color)] py-20 md:py-28">
+          <div className="mb-12 md:mb-16">
+            <h2 className="section-heading">The team</h2>
+            <p className="mt-4 text-base text-[var(--muted-color)]">Every discipline a project needs, working as one team.</p>
+          </div>
+
+          <div ref={teamRef} className="team-flow">
+            <span className="team-line" aria-hidden="true" />
+            {TEAM_PHASES.map((p, i) => (
+              <div key={p.phase} data-reveal className="team-col reveal" style={{ ['--d' as string]: `${i * 100}ms` }}>
+                <span className="team-dot" aria-hidden="true" />
+                <h3 className="team-head">{p.phase}</h3>
+                <ul className="team-pills m-0 list-none p-0">
+                  {p.roles.map((r) => (
+                    <li key={r} className="team-pill">
+                      {r}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* SERVICES */}
+        <section className="border-t border-[var(--border-color)] py-20 md:py-28">
+          <div className="mb-10 md:mb-14">
+            <h2 className="section-heading">Services</h2>
+            <p className="mt-4 text-base text-[var(--muted-color)]">
+              End-to-end capabilities, from first survey to final handover.
+            </p>
+          </div>
+
+          <div ref={servicesRef} className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {SERVICE_GROUPS.map((g, i) => {
+              const Icon = ICONS[g.icon];
+              return (
+                <div key={g.title} data-reveal className="reveal" style={{ ['--d' as string]: `${i * 80}ms` }}>
+                  <article className="service-card h-full">
+                    <div className="flex items-center justify-between">
+                      <Icon className="service-icon" size={28} strokeWidth={1.25} aria-hidden="true" />
+                      <span className="service-count">
+                        {g.items.length} {g.items.length === 1 ? 'service' : 'services'}
+                      </span>
+                    </div>
+                    <h3 className="service-title">{g.title}</h3>
+                    <ul className="service-list">
+                      {g.items.map((it) => (
+                        <li key={it}>{it}</li>
+                      ))}
+                    </ul>
+                  </article>
+                </div>
+              );
+            })}
+          </div>
+        </section>
       </div>
 
-      {/* Lightbox for Workshop images */}
       <Lightbox
         images={WORKSHOP_IMAGES}
         currentIndex={selectedPhotoIndex}
