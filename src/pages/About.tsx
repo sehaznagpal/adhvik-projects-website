@@ -9,21 +9,19 @@ const STEPS = [
   { n: '03', title: 'Build', text: 'Our own workshop and execution teams take every project from concept to handover, under one roof.' },
 ];
 
-const STATS: { value: number; suffix: string; label: React.ReactNode }[] = [
+const STATS: { value: number; suffix: string; label: string }[] = [
   { value: 2013, suffix: '', label: 'Founded' },
   { value: 900, suffix: '+', label: 'Projects delivered' },
   { value: 20, suffix: '', label: 'States across India' },
-  {
-    value: 2,
-    suffix: '',
-    label: (
-      <>
-        International markets
-        <br />
-        UAE &amp; Saudi Arabia
-      </>
-    ),
-  },
+  { value: 2, suffix: '', label: 'Abroad (UAE & Saudi Arabia)' },
+];
+
+// Hand-placed tilt and offset for each card, like the client cards on the home page
+const TILTS = [
+  { r: -2, y: 0 },
+  { r: 1.5, y: 6 },
+  { r: -1, y: -4 },
+  { r: 2, y: 4 },
 ];
 
 const ICONS: Record<string, React.ElementType> = {
@@ -70,7 +68,7 @@ export const About: React.FC = () => {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
   const stepsRef = useReveal<HTMLDivElement>(0.1);
-  const statsRef = useRef<HTMLDivElement>(null);
+  const statsRef = useReveal<HTMLDivElement>(0.05);
   const teamRef = useReveal<HTMLDivElement>(0.05);
   const servicesRef = useReveal<HTMLDivElement>(0.05);
   const [counts, setCounts] = useState<number[]>(() =>
@@ -137,14 +135,16 @@ export const About: React.FC = () => {
     <main className="w-full">
       {/* HERO + STATS: one maroon screen (in both themes) */}
       <section ref={heroRef} className="about-hero">
-        <div className="mx-auto w-full max-w-[1440px] px-5 md:px-10 lg:px-14">
-          <h1 className="section-heading about-hero-title">
-            We design spaces,<br className="hidden md:inline" /> then we build them.
-          </h1>
-          <p className="about-hero-lead">
-            Founded in Delhi in 2013 by Mr. Nagpal, Adhvik Projects is a project management company delivering turnkey
-            spaces pan-India.
-          </p>
+        <div className="about-hero-inner mx-auto w-full max-w-[1440px] px-5 md:px-10 lg:px-14">
+          <div>
+            <h1 className="section-heading about-hero-title">
+              We design spaces,<br className="hidden md:inline" /> then we build them.
+            </h1>
+            <p className="about-hero-lead">
+              Founded in Delhi in 2013 by Mr. Nagpal, Adhvik Projects is a project management company delivering turnkey
+              spaces <span className="whitespace-nowrap">pan-India.</span>
+            </p>
+          </div>
 
           <div ref={stepsRef} className="about-steps">
             {STEPS.map((s, i) => (
@@ -156,14 +156,19 @@ export const About: React.FC = () => {
             ))}
           </div>
 
-          <div ref={statsRef} className="stats">
+          <div ref={statsRef} className="stat-grid">
             {STATS.map((s, i) => (
-              <div key={s.value} className="stat">
-                <div className="stat-num">
-                  {counts[i]}
-                  {s.suffix}
+              <div key={s.value} data-reveal className="stat-slot reveal" style={{ ['--d' as string]: `${i * 80}ms` }}>
+                <div
+                  className="stat-card"
+                  style={{ ['--r' as string]: `${TILTS[i].r}deg`, ['--y' as string]: `${TILTS[i].y}px` }}
+                >
+                  <div className="stat-num">
+                    {counts[i]}
+                    {s.suffix}
+                  </div>
+                  <div className="stat-label">{s.label}</div>
                 </div>
-                <div className="stat-label">{s.label}</div>
               </div>
             ))}
           </div>
@@ -212,8 +217,9 @@ export const About: React.FC = () => {
             <p className="mt-4 text-base text-[var(--muted-color)]">Every discipline a project needs, working as one team.</p>
           </div>
 
-          <div ref={teamRef} className="team-flow">
+          <div ref={teamRef} className="team-wrap">
             <span className="team-line" aria-hidden="true" />
+            <div className="team-flow">
             {TEAM_PHASES.map((p, i) => (
               <div key={p.phase} data-reveal className="team-col reveal" style={{ ['--d' as string]: `${i * 100}ms` }}>
                 <span className="team-dot" aria-hidden="true" />
@@ -227,6 +233,7 @@ export const About: React.FC = () => {
                 </ul>
               </div>
             ))}
+            </div>
           </div>
         </section>
 
