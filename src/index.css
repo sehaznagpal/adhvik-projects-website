@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sand: #F4F1EA;
+  --color-surface: #EAE5DA;
+  --color-ink: #141414;
+  --color-muted: #6B6660;
+  --color-hairline: #D6D0C4;
+  --color-accent: #A8322D;
+  
+  --font-heading: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+}
+
+:root {
+  --bg-color: #F4F1EA;
+  --surface-color: #EAE5DA;
+  --text-color: #141414;
+  --muted-color: #6B6660;
+  --border-color: #D6D0C4;
+  --accent-color: #A8322D;
+}
+
+html.dark {
+  --bg-color: #121110;
+  --surface-color: #1C1A18;
+  --text-color: #EDE9E1;
+  --muted-color: #9A948B;
+  --border-color: #2E2B28;
+  --accent-color: #E0675C;
+}
+
+html {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 300ms cubic-bezier(0.16, 1, 0.3, 1), color 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  overflow-x: hidden;
+  transition: background-color 300ms cubic-bezier(0.16, 1, 0.3, 1), color 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html, body, * {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+  line-height: 0.9;
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-serif-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+/* Hairline borders matching design specification */
+.border-hairline {
+  border-color: var(--border-color);
+}
+
+/* Ticker Marquee animation */
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-ticker {
+  display: flex;
+  width: max-content;
+  animation: ticker 38s linear infinite;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ticker {
+    animation: none;
+    overflow-x: auto;
+  }
+}
+
+/* Hide scrollbar for clean horizontal photo strip */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
