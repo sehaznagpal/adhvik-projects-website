@@ -200,14 +200,26 @@ a[href^="tel:"] {
 @keyframes loader-slide { to { transform: translateY(-100%); } }
 @keyframes loader-out { to { opacity: 0; } }
 
-/* Hero: giant fitted wordmark, info row, drifting photo strip */
+/* Hero: one viewport. Giant fitted wordmark, info row, drifting photo strip filling the rest */
+:root { --header-height: 64px; }
+@media (min-width: 768px) { :root { --header-height: 80px; } }
 .hero {
   max-width: 1440px;
-  margin: 0 auto;
-  padding: 112px 20px 24px;
+  margin: var(--header-height) auto 0;
+  padding: clamp(12px, 2vh, 24px) 20px 0;
+  height: calc(100vh - var(--header-height));
+  height: calc(100dvh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
-@media (min-width: 768px) { .hero { padding: 128px 40px 32px; } }
-@media (min-width: 1024px) { .hero { padding: 128px 56px 40px; } }
+@media (min-width: 768px) { .hero { padding-inline: 40px; } }
+@media (min-width: 1024px) { .hero { padding-inline: 56px; } }
+/* Very short screens (phone landscape): let the hero grow and scroll instead of squashing */
+@media (max-height: 519px) {
+  .hero { height: auto; min-height: calc(100dvh - var(--header-height)); }
+  .hero-strip-wrap { flex: none; height: 300px; }
+}
 .hero-fit { width: 100%; white-space: nowrap; line-height: 0.9; letter-spacing: -0.02em; }
 .hero-fit-inner { display: block; width: max-content; font-size: 100px; }
 .hero-a { font-family: var(--font-heading); font-weight: 700; }
@@ -221,6 +233,7 @@ a[href^="tel:"] {
 }
 .hero.is-in .hero-letter { opacity: 1; transform: none; }
 .hero-rule {
+  flex: none;
   height: 1px;
   background: var(--border-color);
   transform: scaleX(0);
@@ -234,45 +247,62 @@ a[href^="tel:"] {
   transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0ms), transform 700ms cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0ms);
 }
 .hero.is-in .hero-fade { opacity: 1; transform: none; }
-.hero-rule-top { margin-top: 24px; }
+.hero-word { flex: none; }
+.hero-rule-top { margin-top: clamp(12px, 2vh, 24px); }
 .hero-info {
+  flex: none;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: flex-start;
-  gap: 32px;
-  padding: 24px 0;
+  gap: 2px;
+  padding: clamp(12px, 1.6vh, 20px) 0;
+}
+@media (min-width: 900px) {
+  .hero-info { flex-direction: row; justify-content: space-between; align-items: baseline; gap: 32px; }
+  .hero-desc { text-align: right; }
 }
 .hero-tagline {
   margin: 0;
+  white-space: nowrap;
   font-family: var(--font-serif);
   font-weight: 300;
   font-optical-sizing: auto;
-  font-size: clamp(24px, 2.4vw, 36px);
-  line-height: 1.1;
+  font-size: clamp(20px, 1.8vw, 30px);
+  line-height: 1.15;
   color: var(--text-color);
 }
 .hero-desc {
   margin: 0;
-  max-width: 34ch;
-  text-align: right;
-  font-size: clamp(15px, 1.1vw, 18px);
-  line-height: 1.5;
+  white-space: nowrap;
+  font-size: clamp(13px, 1vw, 16px);
+  line-height: 1.4;
   color: var(--muted-color);
 }
-.hero-strip-wrap { margin-top: 64px; }
+.hero-strip-wrap {
+  flex: 1;
+  min-height: 0;
+  margin-top: clamp(16px, 3vh, 40px);
+}
 
 .hero-strip {
-  --label: 56px;
+  --label: 0px;
+  height: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
   overscroll-behavior-x: contain;
-  padding-top: var(--label);
   cursor: grab;
 }
 .hero-strip::-webkit-scrollbar { display: none; }
 .hero-strip.is-dragging { cursor: grabbing; user-select: none; }
-.hero-track { display: flex; align-items: flex-end; width: max-content; }
+.hero-track {
+  display: flex;
+  align-items: flex-end;
+  width: max-content;
+  height: 100%;
+  box-sizing: border-box;
+  padding-top: var(--label);
+}
 .hero-item {
   position: relative;
   margin: 0 8px 0 0;
@@ -281,7 +311,7 @@ a[href^="tel:"] {
 .hero-item img {
   display: block;
   width: auto;
-  height: clamp(calc(var(--k) * 0.55px), calc(var(--k) * 100vw / 1440), calc(var(--k) * 1.2px));
+  height: calc(var(--avail, 300px) * var(--p));
   user-select: none;
   background: var(--surface-color);
   transition: opacity 200ms ease-out;
@@ -317,42 +347,54 @@ a[href^="tel:"] {
   font-size: 15px;
   color: var(--muted-color);
 }
+/* Tall images have no room above them: their label sits on the image, top left */
+.hero-item-tall .hero-label { bottom: auto; top: 14px; left: 14px; color: #F4F1EA; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55); z-index: 1; }
+.hero-item-tall .hero-label-place { color: rgba(244, 241, 234, 0.88); }
+.hero-item-tall::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 96px;
+  background: linear-gradient(rgba(0, 0, 0, 0.45), transparent);
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+  pointer-events: none;
+}
 @media (hover: hover) {
+  .hero-item-tall:hover::after { opacity: 1; }
   .hero-item:hover .hero-label { opacity: 1; transform: none; }
   .hero-strip:has(.hero-item:hover) .hero-item:not(:hover) img { opacity: 0.7; }
 }
 
 /* Mobile */
 .hero-est {
-  margin: 0 0 16px;
+  flex: none;
+  margin: 0 0 clamp(8px, 1.6vh, 16px);
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted-color);
   font-weight: 500;
 }
-.hero-word-mobile { display: flex; flex-direction: column; gap: 0.04em; margin-bottom: 24px; }
-.hero-tagline-mobile { padding: 18px 0; font-size: clamp(22px, 6.4vw, 30px); }
+.hero-word-mobile { display: flex; flex-direction: column; gap: 0.04em; margin-bottom: clamp(10px, 2vh, 24px); }
+.hero-tagline-mobile { flex: none; padding: clamp(10px, 1.8vh, 18px) 0; font-size: clamp(20px, 6vw, 28px); white-space: normal; }
 .hero-strip-mobile { --label: 0px; cursor: auto; }
-@media (max-width: 767px) { .hero-strip-wrap { margin-top: 32px; } }
-.hero-strip-mobile .hero-item img {
-  height: clamp(calc(var(--k) * 0.85px), calc(var(--k) * 100vw / 375), calc(var(--k) * 1.6px));
-}
 .hero-caption {
   display: flex;
   flex-direction: column;
   width: 0;
   min-width: 100%;
+  height: 40px;
   margin-top: 8px;
   overflow: hidden;
   white-space: nowrap;
-  text-overflow: ellipsis;
 }
 .hero-caption-name {
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  line-height: 1.5;
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--text-color);
@@ -362,6 +404,7 @@ a[href^="tel:"] {
   font-style: italic;
   font-weight: 300;
   font-size: 13px;
+  line-height: 1.5;
   color: var(--muted-color);
   overflow: hidden;
   text-overflow: ellipsis;

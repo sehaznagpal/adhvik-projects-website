@@ -20,12 +20,14 @@ const STRIP = STRIP_FILES.map((f) => GALLERY.find((g) => g.file === f)!).filter(
 /** Used by the loader to preload the first photos. */
 export const HERO_IMAGES = STRIP.slice(0, 3).map((g) => ({ src: `/images/${g.file}`, alt: g.caption }));
 
-const DESKTOP_HEIGHTS = [260, 380, 300, 440, 340];
-const MOBILE_HEIGHTS = [180, 240, 200, 260];
+/** Image heights as a share of the strip's available height */
+const HEIGHT_SHARE = [0.7, 1, 0.8, 0.95, 0.75];
+const LABEL_PAD = 0; // hover labels sit above the image; the tallest images carry theirs on the image instead
+const CAPTION_PAD = 48; // room under each image for its caption (mobile)
 const SPEED = 20; // px per second
 
 const DESCRIPTION =
-  'A turnkey design and build firm delivering retail, hospitality and workspace projects across 20 states, the UAE and Saudi Arabia. Established 2013, Delhi.';
+  'Turnkey solutions across 20 states, the UAE and Saudi Arabia. Est. 2013.';
 
 function useDesktop() {
   const query = '(min-width: 768px)';
@@ -54,8 +56,8 @@ const Letters: React.FC<{ text: string; start?: number }> = ({ text, start = 0 }
   </>
 );
 
-/** A line of text whose font-size is set so it exactly fills the width of its container. */
-const FitLine: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+/** A line of text sized to fill the width of its container, but never taller than `maxRatio` of the hero height. */
+const FitLine: React.FC<{ children: React.ReactNode; maxRatio: number }> = ({ children, maxRatio }) => {
   const boxRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     const box = boxRef.current!;
@@ -74,6 +76,9 @@ const FitLine: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         if (Math.abs(next - size) < 0.05) break;
         size = next;
       }
+      // Height cap, so a short screen keeps room for the photo strip (skipped on very short screens)
+      const header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 64;
+      if (window.innerHeight >= 520) size = Math.min(size, (window.innerHeight - header) * maxRatio);
       inner.style.fontSize = `${size}px`;
     };
     fit();
@@ -85,9 +90,13 @@ const FitLine: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       }
     });
     ro.observe(box);
+    window.addEventListener('resize', fit);
     document.fonts?.ready.then(fit);
-    return () => ro.disconnect();
-  }, []);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', fit);
+    };
+  }, [maxRatio]);
   return (
     <div ref={boxRef} className="hero-fit">
       <span className="hero-fit-inner">{children}</span>
@@ -97,7 +106,6 @@ const FitLine: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const Strip: React.FC<{ mobile: boolean; reduced: boolean }> = ({ mobile, reduced }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const heights = mobile ? MOBILE_HEIGHTS : DESKTOP_HEIGHTS;
 
   // Slow right-to-left drift over three copies of the list, so it loops seamlessly and can be dragged either way
   useEffect(() => {
@@ -112,6 +120,12 @@ const Strip: React.FC<{ mobile: boolean; reduced: boolean }> = ({ mobile, reduce
     let dragX = 0;
     let dragStart = 0;
     const third = () => el.scrollWidth / 3;
+    // Image heights are shares of the strip's available height
+    const setAvail = () =>
+      el.style.setProperty('--avail', `${Math.max(el.clientHeight - (mobile ? CAPTION_PAD : LABEL_PAD), 60)}px`);
+    setAvail();
+    const roH = new ResizeObserver(setAvail);
+    roH.observe(el);
     const write = () => {
       el.scrollLeft = pos;
       last = el.scrollLeft;
@@ -183,6 +197,7 @@ const Strip: React.FC<{ mobile: boolean; reduced: boolean }> = ({ mobile, reduce
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
+      roH.disconnect();
       el.removeEventListener('scroll', onScroll);
       el.removeEventListener('mouseenter', enter);
       el.removeEventListener('mouseleave', leave);
@@ -200,9 +215,9 @@ const Strip: React.FC<{ mobile: boolean; reduced: boolean }> = ({ mobile, reduce
           STRIP.map((g, i) => (
             <figure
               key={`${copy}-${g.file}`}
-              className="hero-item"
+              className={`hero-item ${HEIGHT_SHARE[i % HEIGHT_SHARE.length] >= 0.9 ? 'hero-item-tall' : ''}`}
               aria-hidden={copy !== 1}
-              style={{ ['--k' as string]: heights[i % heights.length] }}
+              style={{ ['--p' as string]: HEIGHT_SHARE[i % HEIGHT_SHARE.length] }}
             >
               {!mobile && (
                 <figcaption className="hero-label">
@@ -257,7 +272,7 @@ export const Hero: React.FC<{ introDone?: boolean }> = ({ introDone = true }) =>
       {desktop ? (
         <>
           <div aria-hidden="true" className="hero-word">
-            <FitLine>
+            <FitLine maxRatio={0.22}>
               <span className="hero-a">
                 <Letters text="ADHVIK" />
               </span>
@@ -283,12 +298,12 @@ export const Hero: React.FC<{ introDone?: boolean }> = ({ introDone = true }) =>
             Established 2013 · Delhi, India
           </p>
           <div aria-hidden="true" className="hero-word hero-word-mobile">
-            <FitLine>
+            <FitLine maxRatio={0.14}>
               <span className="hero-a">
                 <Letters text="ADHVIK" />
               </span>
             </FitLine>
-            <FitLine>
+            <FitLine maxRatio={0.14}>
               <span className="hero-p">
                 <Letters text="PROJECTS" start={6} />
               </span>

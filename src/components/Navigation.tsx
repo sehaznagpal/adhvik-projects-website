@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { CONTACT_INFO } from '../data/projects';
 import { Wordmark } from './Wordmark';
 import { TAGLINE, DESCRIPTOR } from '../data/brand';
@@ -36,6 +36,18 @@ export const Navigation: React.FC<NavigationProps> = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<LinkKey>('about');
 
+  // Publish the real header height so the hero can fill exactly the rest of the viewport
+  const headerRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const set = () => document.documentElement.style.setProperty('--header-height', `${el.offsetHeight}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 30);
@@ -71,6 +83,7 @@ export const Navigation: React.FC<NavigationProps> = ({
     <>
       {/* Sticky Top Bar */}
       <header
+        ref={headerRef}
         className={`fixed top-0 left-0 right-0 z-40 transition-colors duration-300 ${
           isScrolled
             ? 'bg-[var(--bg-color)]/95 backdrop-blur-md border-b border-[var(--border-color)]'
