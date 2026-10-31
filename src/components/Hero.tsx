@@ -22,8 +22,6 @@ export const HERO_IMAGES = STRIP.slice(0, 3).map((g) => ({ src: `/images/${g.fil
 
 /** Image heights as a share of the strip's available height */
 const HEIGHT_SHARE = [0.7, 1, 0.8, 0.95, 0.75];
-const LABEL_PAD = 0; // hover labels sit above the image; the tallest images carry theirs on the image instead
-const CAPTION_PAD = 48; // room under each image for its caption (mobile)
 const SPEED = 20; // px per second
 
 const DESCRIPTION =
@@ -122,7 +120,7 @@ const Strip: React.FC<{ mobile: boolean; reduced: boolean }> = ({ mobile, reduce
     const third = () => el.scrollWidth / 3;
     // Image heights are shares of the strip's available height
     const setAvail = () =>
-      el.style.setProperty('--avail', `${Math.max(el.clientHeight - (mobile ? CAPTION_PAD : LABEL_PAD), 60)}px`);
+      el.style.setProperty('--avail', `${Math.max(el.clientHeight, 60)}px`);
     setAvail();
     const roH = new ResizeObserver(setAvail);
     roH.observe(el);
@@ -215,19 +213,10 @@ const Strip: React.FC<{ mobile: boolean; reduced: boolean }> = ({ mobile, reduce
           STRIP.map((g, i) => (
             <figure
               key={`${copy}-${g.file}`}
-              className={`hero-item ${HEIGHT_SHARE[i % HEIGHT_SHARE.length] >= 0.9 ? 'hero-item-tall' : ''}`}
+              className="hero-item"
               aria-hidden={copy !== 1}
               style={{ ['--p' as string]: HEIGHT_SHARE[i % HEIGHT_SHARE.length] }}
             >
-              {!mobile && (
-                <figcaption className="hero-label">
-                  <span className="hero-label-name">
-                    <span className="hero-dot" />
-                    {g.caption}
-                  </span>
-                  <span className="hero-label-place">{g.location}</span>
-                </figcaption>
-              )}
               <img
                 src={`/images/${g.file}`}
                 width={g.width}
@@ -236,12 +225,11 @@ const Strip: React.FC<{ mobile: boolean; reduced: boolean }> = ({ mobile, reduce
                 draggable={false}
                 loading={copy === 1 && i < 4 ? 'eager' : 'lazy'}
               />
-              {mobile && (
-                <figcaption className="hero-caption">
-                  <span className="hero-caption-name">{g.caption}</span>
-                  <span className="hero-caption-place">{g.location}</span>
-                </figcaption>
-              )}
+              <span className="cap-overlay" aria-hidden="true">
+                <span className="cap-name">{g.caption}</span>
+                <span className="cap-place">{g.location}</span>
+              </span>
+              <span className="cap-pill" aria-hidden="true">{g.caption}</span>
             </figure>
           ))
         )}

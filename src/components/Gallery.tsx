@@ -177,7 +177,7 @@ export const Gallery: React.FC = () => {
       <div className="mb-10 md:mb-16">
         <span className="eyebrow">Gallery</span>
         <h2 className="section-heading">A look inside</h2>
-        <p className="mt-4 max-w-[52ch] text-base text-[var(--muted-color)]">
+        <p className="mt-4 text-base text-[var(--muted-color)]">
           Glimpses of retail stores, fitness spaces and interiors we have designed and delivered across India and abroad.
         </p>
       </div>
@@ -198,7 +198,7 @@ export const Gallery: React.FC = () => {
                   className={`gallery-tile group ${seen.current.has(item.file) ? 'is-in' : ''}`}
                   style={{ width: row.w[k], height: row.h }}
                 >
-                  <span className="block h-full w-full overflow-hidden rounded-xl bg-[var(--surface-color)]">
+                  <span className="relative block h-full w-full overflow-hidden rounded-xl bg-[var(--surface-color)]">
                     <img
                       src={`/images/${item.file}`}
                       alt={`${item.caption} interior`}
@@ -207,8 +207,12 @@ export const Gallery: React.FC = () => {
                       loading="lazy"
                       className="block h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03] group-focus-visible:scale-[1.03] motion-reduce:transition-none motion-reduce:transform-none"
                     />
+                    <span className="cap-overlay" aria-hidden="true">
+                      <span className="cap-name">{item.caption}</span>
+                      {item.location && <span className="cap-place">{item.location}</span>}
+                    </span>
+                    <span className="cap-pill" aria-hidden="true">{item.caption}</span>
                   </span>
-                  <span className="gallery-caption" aria-hidden="true">{item.caption}</span>
                 </button>
               );
             })}

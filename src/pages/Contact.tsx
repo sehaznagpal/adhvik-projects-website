@@ -31,7 +31,7 @@ export const Contact: React.FC = () => {
 
       <div className="max-w-[1440px] mx-auto px-5 md:px-10 lg:px-14">
         {/* Section Header */}
-        <div className="mb-14 md:mb-20 max-w-4xl">
+        <div className="mb-14 md:mb-20">
           <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent-color)] block mb-3">
             Get in Touch
           </span>
