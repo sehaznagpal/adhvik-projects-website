@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { CONTACT_INFO } from '../data/projects';
+import { CONTACT_INFO } from '../data/contact';
 import { Wordmark } from './Wordmark';
 import { TAGLINE, DESCRIPTOR } from '../data/brand';
 

@@ -644,6 +644,7 @@ html.dark .client-card { box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
 /* Footer: plain and spacious */
 .footer-heading {
   margin: 0;
+  color: #F4F1EA;
   font-size: clamp(40px, 6vw, 96px);
   line-height: 1.05;
   letter-spacing: -0.02em;
@@ -657,7 +658,7 @@ html.dark .client-card { box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
   font-weight: 300;
   font-optical-sizing: auto;
   letter-spacing: 0;
-  color: var(--accent-color);
+  color: #E7A9AC;
   transition: color 250ms ease;
 }
 .footer-cta-arrow {
@@ -667,15 +668,15 @@ html.dark .client-card { box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
   transition: transform 250ms ease;
 }
 .footer-cta:hover,
-.footer-cta:focus-visible { color: var(--text-color); }
+.footer-cta:focus-visible { color: #F4F1EA; }
 .footer-cta:hover .footer-cta-arrow,
 .footer-cta:focus-visible .footer-cta-arrow { transform: translate(6px, -6px); }
-.footer-cta:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 6px; border-radius: 4px; }
+.footer-cta:focus-visible { outline: 2px solid #E7A9AC; outline-offset: 6px; border-radius: 4px; }
 .footer-line {
   font-family: var(--font-body);
   font-size: 18px;
   line-height: 1.5;
-  color: var(--text-color);
+  color: #F4F1EA;
   font-variant-numeric: lining-nums;
   background: none;
   border: 0;
@@ -690,7 +691,32 @@ html.dark .client-card { box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
 }
 .footer-line:hover,
 .footer-line:focus-visible { background-size: 100% 1px; }
-.footer-line:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 4px; }
+.footer-line:focus-visible { outline: 2px solid #E7A9AC; outline-offset: 4px; }
+.footer-label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 234, 0.65);
+  margin-bottom: 6px;
+}
+.footer-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(244, 241, 234, 0.65);
+  transition: color 200ms ease;
+}
+.footer-link:hover,
+.footer-link:focus-visible { color: #F4F1EA; }
+.footer-link:focus-visible { outline: 2px solid #E7A9AC; outline-offset: 4px; }
 @media (prefers-reduced-motion: reduce) {
   .footer-cta:hover .footer-cta-arrow,
   .footer-cta:focus-visible .footer-cta-arrow { transform: none; }

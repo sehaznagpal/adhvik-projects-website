@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CONTACT_INFO } from '../data/projects';
+import { CONTACT_INFO } from '../data/contact';
 import { ArrowUpRight, Copy, Check } from 'lucide-react';
 
 export const Contact: React.FC = () => {
