@@ -1,14 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Ticker } from '../components/Ticker';
+import { Categories } from '../components/Categories';
+import { Wordmark } from '../components/Wordmark';
 import { PROJECTS, HERO_FEATURED_PHOTOS } from '../data/projects';
+import { TAGLINE, DESCRIPTOR } from '../data/brand';
+
+export const HERO_IMAGES = HERO_FEATURED_PHOTOS.map(({ src, alt }) => ({ src, alt }));
 
 interface HomeProps {
   onNavigate: (path: string) => void;
+  introDone?: boolean;
 }
 
-export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
+export const Home: React.FC<HomeProps> = ({ onNavigate, introDone = true }) => {
   const [heroAnimated, setHeroAnimated] = useState(false);
-  const [photosVisible, setPhotosVisible] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const cardRef = useRef<HTMLDivElement>(null);
   const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
   const [isHoveringImage, setIsHoveringImage] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -21,27 +28,41 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
     setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }, []);
 
-  // Hero staggered letter animation on mount
+  // Hero entrance plays once the loader has gone
   useEffect(() => {
-    // Check if user prefers reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
+    if (!introDone) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
       setHeroAnimated(true);
-      setPhotosVisible(true);
       return;
     }
+    const timer = setTimeout(() => setHeroAnimated(true), 50);
+    return () => clearTimeout(timer);
+  }, [introDone]);
 
-    const timer = setTimeout(() => {
-      setHeroAnimated(true);
-    }, 50);
+  // Slow crossfade through the hero photos
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const id = setInterval(() => setActiveSlide((i) => (i + 1) % HERO_IMAGES.length), 4000);
+    return () => clearInterval(id);
+  }, []);
 
-    const photosTimer = setTimeout(() => {
-      setPhotosVisible(true);
-    }, 700);
-
+  // Slight scale-down of the portrait card on scroll
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const p = Math.min(window.scrollY / Math.max(window.innerHeight, 1), 1);
+      if (cardRef.current) cardRef.current.style.transform = `scale(${1 - 0.06 * p})`;
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
-      clearTimeout(timer);
-      clearTimeout(photosTimer);
+      window.removeEventListener('scroll', onScroll);
+      if (raf) cancelAnimationFrame(raf);
     };
   }, []);
 
@@ -69,9 +90,6 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
     };
   }, [isTouchDevice]);
 
-  const word1 = 'ADHVIK'.split('');
-  const word2 = 'PROJECTS'.split('');
-
   return (
     <main className="w-full">
       {/* Floating View Cursor for Desktop */}
@@ -89,105 +107,60 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
       )}
 
       {/* HERO SECTION */}
-      <section className="pt-24 sm:pt-28 md:pt-36 pb-12 md:pb-20 max-w-[1440px] mx-auto px-5 md:px-10 lg:px-14">
-        {/* Top Meta Line: stacked below 1024px with 8px gap, side-by-side on 1024px+ */}
-        <div className="flex flex-col items-start gap-2 lg:flex-row lg:items-center lg:justify-between text-xs md:text-sm text-[var(--muted-color)] uppercase tracking-[0.08em] mb-6 md:mb-10 font-medium">
-          <span>Architecture and Turnkey Execution</span>
-          <span>Est. 2013 · Delhi, India</span>
-        </div>
+      <section className="relative max-w-[1440px] mx-auto px-5 md:px-10 lg:px-14 pt-28 md:pt-36 pb-16 lg:pt-0 lg:pb-0 lg:min-h-[100svh] flex items-center">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-[1fr_30vw_1fr] gap-10 lg:gap-12 items-center">
+          {/* Left: wordmark + meta */}
+          <div className={`hero-reveal ${heroAnimated ? 'is-in' : ''}`} style={{ transitionDelay: '0ms' }}>
+            <h1 className="m-0 text-[var(--text-color)] text-[clamp(28px,2.6vw,40px)] max-lg:text-[clamp(32px,8vw,44px)]">
+              <span className="sr-only">Adhvik Projects</span>
+              <span aria-hidden="true">
+                <Wordmark />
+              </span>
+            </h1>
+            <p className="mt-4 text-xs uppercase tracking-[0.08em] text-[var(--muted-color)] font-medium">
+              {DESCRIPTOR} · Est. 2013 · Delhi, India
+            </p>
+          </div>
 
-        {/* Huge Uppercase Brand Name with Staggered Letter Rise Animation */}
-        <div className="mb-6 md:mb-10 overflow-hidden">
-          <h1
-            className="font-heading font-extrabold uppercase text-[var(--text-color)] leading-[0.88] tracking-[-0.04em] text-[clamp(2.75rem,11.5vw,10.5rem)] select-none break-words"
-            aria-label="ADHVIK PROJECTS"
+          {/* Center: crossfading portrait card */}
+          <div
+            className={`hero-reveal ${heroAnimated ? 'is-in' : ''} lg:justify-self-center w-full`}
+            style={{ transitionDelay: '150ms' }}
           >
-            {/* Word 1: ADHVIK */}
-            <span className="inline-block whitespace-nowrap mr-3 sm:mr-6">
-              {word1.map((char, index) => (
-                <span
-                  key={`char-1-${index}`}
-                  className="inline-block overflow-hidden"
-                >
-                  <span
-                    className={`inline-block transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                      heroAnimated ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
-                    }`}
-                    style={{ transitionDelay: `${index * 30}ms` }}
-                  >
-                    {char}
-                  </span>
-                </span>
+            <div
+              ref={cardRef}
+              className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden bg-[var(--surface-color)] will-change-transform"
+            >
+              {HERO_IMAGES.map((img, i) => (
+                <img
+                  key={img.src}
+                  src={img.src}
+                  alt={i === activeSlide ? img.alt : ''}
+                  aria-hidden={i !== activeSlide}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out ${
+                    i === activeSlide ? 'opacity-100' : 'opacity-0'
+                  }`}
+                />
               ))}
-            </span>
+            </div>
+          </div>
 
-            {/* Word 2: PROJECTS */}
-            <span className="inline-block whitespace-nowrap">
-              {word2.map((char, index) => (
-                <span
-                  key={`char-2-${index}`}
-                  className="inline-block overflow-hidden"
-                >
-                  <span
-                    className={`inline-block transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                      heroAnimated ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
-                    }`}
-                    style={{ transitionDelay: `${(word1.length + index) * 30}ms` }}
-                  >
-                    {char}
-                  </span>
-                </span>
-              ))}
-            </span>
-          </h1>
+          {/* Right: tagline */}
+          <div className={`hero-reveal ${heroAnimated ? 'is-in' : ''}`} style={{ transitionDelay: '300ms' }}>
+            <p className="font-serif-light text-[clamp(36px,3.6vw,56px)] leading-[1.05] tracking-[0em] text-[var(--text-color)] m-0">
+              {TAGLINE}
+            </p>
+          </div>
         </div>
 
-        {/* Hero Tagline: Single line on screens 768px and wider, no dashes */}
-        <div className="w-full mb-12 md:mb-16">
-          <p className="text-base sm:text-lg md:text-[clamp(1.1rem,1.9vw,1.65rem)] md:whitespace-nowrap font-normal leading-relaxed text-[var(--text-color)]">
-            Architecture, interiors and turnkey execution,{' '}
-            <span className="font-serif-italic text-[1.12em] text-[var(--text-color)]">
-              from first sketch to opening day.
-            </span>
-          </p>
-        </div>
-
-        {/* How&How Style Hero Collage Row with gentle fade-up after title */}
+        {/* Scroll cue */}
         <div
-          className={`w-full transition-all duration-700 ease-out ${
-            photosVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
-          }`}
+          className="hidden lg:flex absolute bottom-6 left-1/2 -translate-x-1/2 flex-col items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-[var(--muted-color)]"
+          aria-hidden="true"
         >
-          {/* Mobile scroll indicator */}
-          <div className="sm:hidden flex items-center justify-between text-[11px] text-[var(--muted-color)] uppercase tracking-[0.08em] mb-2">
-            <span>Featured Spaces</span>
-            <span>Scroll horizontally →</span>
-          </div>
-
-          <div className="flex sm:grid sm:grid-cols-4 gap-3 sm:gap-4 md:gap-5 overflow-x-auto sm:overflow-visible pb-4 sm:pb-0 snap-x snap-mandatory no-scrollbar">
-            {HERO_FEATURED_PHOTOS.map((photo, idx) => (
-              <button
-                key={photo.slug}
-                onClick={() => onNavigate(`/work/${photo.slug}`)}
-                className="group flex-none w-[72vw] sm:w-auto text-left focus:outline-none snap-start cursor-pointer"
-              >
-                <div className="aspect-[4/5] bg-[var(--surface-color)] overflow-hidden relative">
-                  <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    loading={idx === 0 ? 'eager' : 'lazy'}
-                    className="w-full h-full object-cover transition-transform duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
-                  />
-                </div>
-                <div className="mt-2.5 flex items-baseline justify-between text-xs">
-                  <span className="font-medium text-[var(--text-color)] group-hover:text-[var(--accent-color)] transition-colors">
-                    {photo.label}
-                  </span>
-                  <span className="text-[var(--muted-color)]">{photo.location}</span>
-                </div>
-              </button>
-            ))}
-          </div>
+          <span>Scroll</span>
+          <span className="block w-px h-8 bg-[var(--muted-color)] opacity-60" />
         </div>
       </section>
 
@@ -195,6 +168,8 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
       <section className="my-4 md:my-8">
         <Ticker />
       </section>
+
+      <Categories />
 
       {/* WORK SECTION (dvdrod style) */}
       <section id="work" className="pt-20 md:pt-32 pb-24 md:pb-36 max-w-[1440px] mx-auto px-5 md:px-10 lg:px-14 scroll-mt-20">
@@ -204,7 +179,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
             <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent-color)] block mb-2">
               Selected Projects
             </span>
-            <h2 className="font-heading text-4xl sm:text-6xl md:text-7xl font-bold tracking-[-0.04em] text-[var(--text-color)]">
+            <h2 className="font-heading text-4xl sm:text-6xl md:text-7xl font-bold tracking-[-0.02em] text-[var(--text-color)]">
               Work
             </h2>
           </div>
@@ -234,8 +209,8 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                         {project.number}
                       </span>
 
-                      {/* Project Name (tracking-[-0.01em] for between 20px and 48px, [-0.04em] for >=48px) */}
-                      <h3 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold tracking-[-0.01em] md:tracking-[-0.04em] text-[var(--text-color)] group-hover:text-[var(--accent-color)] transition-colors mb-4 md:mb-6">
+                      {/* Project Name (tracking-[0em] for between 20px and 48px, [-0.04em] for >=48px) */}
+                      <h3 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold tracking-[0em] md:tracking-[-0.02em] text-[var(--text-color)] group-hover:text-[var(--accent-color)] transition-colors mb-4 md:mb-6">
                         {project.name}
                       </h3>
 

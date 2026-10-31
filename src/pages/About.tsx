@@ -66,9 +66,9 @@ export const About: React.FC = () => {
         {/* Section Header */}
         <div className="mb-12 md:mb-16">
           <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent-color)] block mb-3">
-            About Adhvik Projects
+            About · Turnkey Solutions
           </span>
-          <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.04em] text-[var(--text-color)] leading-[0.92]">
+          <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.02em] text-[var(--text-color)] leading-[0.92]">
             We design spaces, <br className="hidden sm:inline" />
             then we build them.
           </h1>
@@ -109,7 +109,7 @@ export const About: React.FC = () => {
                   <dt className="text-xs uppercase tracking-[0.08em] text-[var(--muted-color)]">
                     Established
                   </dt>
-                  <dd className="font-heading text-3xl md:text-4xl font-bold tracking-[-0.01em] text-[var(--text-color)] tabular-nums">
+                  <dd className="font-heading text-3xl md:text-4xl font-bold tracking-[0em] text-[var(--text-color)] tabular-nums">
                     {countYears || 2013}
                   </dd>
                 </div>
@@ -117,7 +117,7 @@ export const About: React.FC = () => {
                   <dt className="text-xs uppercase tracking-[0.08em] text-[var(--muted-color)]">
                     Projects Delivered
                   </dt>
-                  <dd className="font-heading text-3xl md:text-4xl font-bold tracking-[-0.01em] text-[var(--text-color)] tabular-nums">
+                  <dd className="font-heading text-3xl md:text-4xl font-bold tracking-[0em] text-[var(--text-color)] tabular-nums">
                     {countProjects || 900}+
                   </dd>
                 </div>
@@ -134,7 +134,7 @@ export const About: React.FC = () => {
                     Capabilities
                   </dt>
                   <dd className="text-sm font-medium text-[var(--text-color)] mt-1">
-                    Architecture · Interiors · Turnkey Execution · In-house Workshop
+                    Turnkey Solutions · In-house Workshop
                   </dd>
                 </div>
               </dl>
@@ -148,7 +148,7 @@ export const About: React.FC = () => {
             <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent-color)] block mb-2">
               End-to-End Capabilities
             </span>
-            <h2 className="font-heading text-3xl sm:text-5xl font-bold tracking-[-0.01em] md:tracking-[-0.04em] text-[var(--text-color)]">
+            <h2 className="font-heading text-3xl sm:text-5xl font-bold tracking-[0em] md:tracking-[-0.02em] text-[var(--text-color)]">
               Services
             </h2>
           </div>
@@ -176,7 +176,7 @@ export const About: React.FC = () => {
             <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent-color)] block mb-2">
               Cross-Functional Expertise
             </span>
-            <h2 className="font-heading text-2xl sm:text-4xl font-bold tracking-[-0.01em] text-[var(--text-color)]">
+            <h2 className="font-heading text-2xl sm:text-4xl font-bold tracking-[0em] text-[var(--text-color)]">
               The Team
             </h2>
           </div>
@@ -199,7 +199,7 @@ export const About: React.FC = () => {
             <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent-color)] block mb-2">
               Fabrication Facility
             </span>
-            <h2 className="font-heading text-3xl sm:text-5xl font-bold tracking-[-0.01em] md:tracking-[-0.04em] text-[var(--text-color)] mb-3">
+            <h2 className="font-heading text-3xl sm:text-5xl font-bold tracking-[0em] md:tracking-[-0.02em] text-[var(--text-color)] mb-3">
               Our Workshop
             </h2>
             <p className="text-sm md:text-base text-[var(--muted-color)]">

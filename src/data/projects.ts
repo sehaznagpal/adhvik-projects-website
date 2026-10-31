@@ -5,6 +5,7 @@ export interface Project {
   location: string;
   area: string;
   type: string;
+  category: string;
   scope?: string;
   coverImage: string;
   coverAlt: string;
@@ -22,6 +23,7 @@ export const PROJECTS: Project[] = [
     location: "Lashkar, Gwalior, MP",
     area: "19,000 sq ft",
     type: "Retail",
+    category: "retail-stores",
     scope: "Design + turnkey execution",
     coverImage: "/images/wardrobe-gwalior-01.jpg",
     coverAlt: "Wardrobe, Gwalior, store façade and street entrance in Lashkar",
@@ -51,6 +53,7 @@ export const PROJECTS: Project[] = [
     location: "Rajpur Road, Dehradun",
     area: "36,000 sq ft",
     type: "Retail",
+    category: "retail-stores",
     scope: "Design + turnkey execution",
     coverImage: "/images/stanmax-dehradun-05.jpg",
     coverAlt: "Stanmax, Dehradun, flagship retail store architectural exterior on Rajpur Road",
@@ -80,6 +83,7 @@ export const PROJECTS: Project[] = [
     location: "Al Andalus Mall, Jeddah, KSA",
     area: "1,950 sq ft",
     type: "Retail · International",
+    category: "retail-stores",
     scope: "Design + turnkey execution",
     coverImage: "/images/madame-jeddah-02.jpg",
     coverAlt: "Madame, Jeddah, international retail showroom glass facade at Al Andalus Mall",
@@ -101,6 +105,7 @@ export const PROJECTS: Project[] = [
     location: "Bestech, Mohali",
     area: "2,550 sq ft",
     type: "Retail",
+    category: "retail-stores",
     scope: "Design + turnkey execution",
     coverImage: "/images/global-republic-mohali-01.jpg",
     coverAlt: "Global Republic, Mohali, storefront showcase with glass bays at Bestech",
@@ -130,6 +135,7 @@ export const PROJECTS: Project[] = [
     location: "Rajouri Garden Main Market, Delhi",
     area: "1,900 sq ft",
     type: "Retail",
+    category: "retail-stores",
     scope: "Design + turnkey execution",
     coverImage: "/images/global-republic-rajouri-garden-01.jpg",
     coverAlt: "Global Republic, Rajouri Garden, flagship store entrance in Main Market, Delhi",
@@ -159,6 +165,7 @@ export const PROJECTS: Project[] = [
     location: "Ambience Mall, Gurugram",
     area: "2,950 sq ft",
     type: "Retail",
+    category: "retail-stores",
     scope: "Design + turnkey execution",
     coverImage: "/images/camla-gurgaon-01.jpg",
     coverAlt: "Camla, Gurugram, store entrance with backlit signage at Ambience Mall",
@@ -188,6 +195,7 @@ export const PROJECTS: Project[] = [
     location: "City Centre, Gwalior",
     area: "2,350 sq ft",
     type: "Retail",
+    category: "retail-stores",
     scope: "Design + turnkey execution",
     coverImage: "/images/madame-gwalior-01.jpg",
     coverAlt: "Madame, Gwalior, storefront in City Centre with contemporary slatted canopy",
@@ -213,6 +221,7 @@ export const PROJECTS: Project[] = [
     location: "Bhimtal, Nainital, Uttarakhand",
     area: "1,20,000 sq ft",
     type: "Hospitality",
+    category: "hotels-banquet-halls",
     scope: "Design + turnkey execution",
     coverImage: "/images/fern-hotel-bhimtal-01.jpg",
     coverAlt: "The Fern Hotel, Bhimtal, resort illuminated evening panoramic exterior",
@@ -345,12 +354,13 @@ export const TICKER_ITEMS = [
   "900+ PROJECTS DELIVERED",
   "20 STATES",
   "INTERNATIONAL: UAE & SAUDI ARABIA",
-  "ARCHITECTURE",
-  "INTERIOR DESIGN",
-  "TURNKEY EXECUTION",
-  "RETAIL & BRAND STORES",
-  "HOTELS & RESORTS",
-  "CORPORATE INTERIORS",
+  "TURNKEY SOLUTIONS",
+  "RETAIL STORES (MBO & EBO)",
+  "HOTELS & BANQUET HALLS",
+  "GYMS",
+  "FOOD COURTS & CAFETERIAS",
+  "CORPORATE OFFICES",
+  "EXHIBITIONS",
   "IN-HOUSE FURNITURE WORKSHOP",
 ];
 

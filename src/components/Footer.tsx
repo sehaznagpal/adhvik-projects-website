@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CONTACT_INFO } from '../data/projects';
+import { TAGLINE, DESCRIPTOR } from '../data/brand';
 import { Check, Copy } from 'lucide-react';
 
 interface FooterProps {
@@ -36,12 +37,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <div className="max-w-[1440px] mx-auto px-5 md:px-10 lg:px-14">
         {/* Big Call to Action line */}
         <div className="mb-16 md:mb-24">
-          <h2 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.04em] text-[var(--text-color)] leading-[0.95]">
+          <h2 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.02em] text-[var(--text-color)] leading-[0.95]">
             Have a space in mind?{' '}
-            <span className="font-serif-italic font-normal text-[var(--accent-color)] block sm:inline">
+            <span className="font-serif-italic font-light text-[var(--accent-color)] block sm:inline">
               Let's build it.
             </span>
           </h2>
+          <p className="font-serif-italic text-2xl md:text-3xl text-[var(--text-color)] mt-6 md:mt-8">
+            {TAGLINE}
+          </p>
         </div>
 
         {/* Contact Block & Grid */}
@@ -132,7 +136,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
           {/* Copyright */}
           <div className="text-xs">
-            © 2026 Adhvik Projects. All rights reserved.
+            © 2026 Adhvik Projects · {DESCRIPTOR}. All rights reserved.
           </div>
         </div>
       </div>

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CONTACT_INFO } from '../data/projects';
+import { Wordmark } from './Wordmark';
+import { TAGLINE, DESCRIPTOR } from '../data/brand';
 
 interface NavigationProps {
   currentPath: string;
@@ -69,10 +71,10 @@ export const Navigation: React.FC<NavigationProps> = ({
           {/* Wordmark with 0.02em letter-spacing */}
           <button
             onClick={() => handleLinkClick('/')}
-            className="text-left font-heading text-sm md:text-base font-bold tracking-[0.02em] text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent-color)] cursor-pointer"
+            className="text-left text-lg md:text-xl text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent-color)] cursor-pointer"
             aria-label="Adhvik Projects Home"
           >
-            ADHVIK PROJECTS
+            <Wordmark />
           </button>
 
           {/* Right Action Cluster: Theme Toggle Icon Button + Menu Button */}
@@ -160,9 +162,9 @@ export const Navigation: React.FC<NavigationProps> = ({
         <div className="max-w-[1440px] w-full mx-auto px-5 md:px-10 lg:px-14 h-16 md:h-20 flex items-center justify-between border-b border-[var(--border-color)]">
           <button
             onClick={() => handleLinkClick('/')}
-            className="font-heading text-sm md:text-base font-bold tracking-[0.02em] text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors focus:outline-none cursor-pointer"
+            className="text-lg md:text-xl text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors focus:outline-none cursor-pointer"
           >
-            ADHVIK PROJECTS
+            <Wordmark />
           </button>
 
           <div className="flex items-center gap-6 sm:gap-8">
@@ -246,7 +248,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               >
                 <button
                   onClick={() => handleLinkClick('/', true)}
-                  className="group text-left font-heading text-5xl sm:text-7xl md:text-8xl font-bold tracking-[-0.04em] text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors inline-flex items-start gap-2 focus:outline-none cursor-pointer"
+                  className="group text-left font-heading text-5xl sm:text-7xl md:text-8xl font-bold tracking-[-0.02em] text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors inline-flex items-start gap-2 focus:outline-none cursor-pointer"
                 >
                   <span>Work</span>
                   <span className="text-[14px] tracking-[0.04em] font-normal leading-normal text-[var(--muted-color)] group-hover:text-[var(--accent-color)] transition-colors pt-2">
@@ -263,7 +265,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               >
                 <button
                   onClick={() => handleLinkClick('/about')}
-                  className={`text-left font-heading text-5xl sm:text-7xl md:text-8xl font-bold tracking-[-0.04em] hover:text-[var(--accent-color)] transition-colors focus:outline-none cursor-pointer ${
+                  className={`text-left font-heading text-5xl sm:text-7xl md:text-8xl font-bold tracking-[-0.02em] hover:text-[var(--accent-color)] transition-colors focus:outline-none cursor-pointer ${
                     currentPath === '/about' ? 'text-[var(--accent-color)]' : 'text-[var(--text-color)]'
                   }`}
                 >
@@ -279,7 +281,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               >
                 <button
                   onClick={() => handleLinkClick('/contact')}
-                  className={`text-left font-heading text-5xl sm:text-7xl md:text-8xl font-bold tracking-[-0.04em] hover:text-[var(--accent-color)] transition-colors focus:outline-none cursor-pointer ${
+                  className={`text-left font-heading text-5xl sm:text-7xl md:text-8xl font-bold tracking-[-0.02em] hover:text-[var(--accent-color)] transition-colors focus:outline-none cursor-pointer ${
                     currentPath === '/contact' ? 'text-[var(--accent-color)]' : 'text-[var(--text-color)]'
                   }`}
                 >
@@ -344,8 +346,11 @@ export const Navigation: React.FC<NavigationProps> = ({
             </div>
           </div>
 
-          <div className="text-xs uppercase tracking-[0.08em] text-[var(--muted-color)]">
-            Delhi, India · Est. {CONTACT_INFO.est}
+          <div className="flex flex-col items-start gap-1 lg:items-end">
+            <span className="font-serif-italic text-lg md:text-xl text-[var(--text-color)]">{TAGLINE}</span>
+            <span className="text-xs uppercase tracking-[0.08em] text-[var(--muted-color)]">
+              {DESCRIPTOR} · Delhi, India · Est. {CONTACT_INFO.est}
+            </span>
           </div>
         </div>
       </div>

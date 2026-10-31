@@ -35,7 +35,7 @@ export const Contact: React.FC = () => {
           <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent-color)] block mb-3">
             Get in Touch
           </span>
-          <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.04em] text-[var(--text-color)] leading-[0.92]">
+          <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.02em] text-[var(--text-color)] leading-[0.92]">
             Let's talk about <br />
             your space.
           </h1>
@@ -54,7 +54,7 @@ export const Contact: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleCopy(CONTACT_INFO.email, 'Email')}
-                className="text-left text-xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold tracking-[-0.01em] md:tracking-[-0.04em] text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors break-all focus:outline-none"
+                className="text-left text-xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold tracking-[0em] md:tracking-[-0.02em] text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors break-all focus:outline-none"
                 title="Click to copy email address"
               >
                 {CONTACT_INFO.email}
@@ -92,7 +92,7 @@ export const Contact: React.FC = () => {
               <div className="flex items-center justify-between gap-4">
                 <a
                   href={`tel:${CONTACT_INFO.phone.replace(/\s+/g, '')}`}
-                  className="text-xl sm:text-3xl md:text-4xl font-heading font-bold tracking-[-0.01em] text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors"
+                  className="text-xl sm:text-3xl md:text-4xl font-heading font-bold tracking-[0em] text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors"
                 >
                   {CONTACT_INFO.phone}
                 </a>
@@ -120,7 +120,7 @@ export const Contact: React.FC = () => {
               <div className="flex items-center justify-between gap-4 pt-4 border-t border-[var(--border-color)]">
                 <a
                   href={`tel:${CONTACT_INFO.phoneSecondary.replace(/\s+/g, '')}`}
-                  className="text-xl sm:text-3xl md:text-4xl font-heading font-bold tracking-[-0.01em] text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors"
+                  className="text-xl sm:text-3xl md:text-4xl font-heading font-bold tracking-[0em] text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors"
                 >
                   {CONTACT_INFO.phoneSecondary}
                 </a>
@@ -178,7 +178,7 @@ export const Contact: React.FC = () => {
         {/* Google Maps Embed & Location Context */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-4">
-            <h2 className="font-heading text-2xl md:text-3xl font-bold tracking-[-0.01em] text-[var(--text-color)] mb-3">
+            <h2 className="font-heading text-2xl md:text-3xl font-bold tracking-[0em] text-[var(--text-color)] mb-3">
               Delhi Headquarters
             </h2>
             <p className="text-sm md:text-base text-[var(--muted-color)] leading-relaxed mb-6 font-normal">

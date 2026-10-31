@@ -23,7 +23,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ slug, onNavigate }
         >
           ← All work
         </button>
-        <h1 className="font-heading text-4xl font-bold tracking-[-0.01em] text-[var(--text-color)] mb-4">
+        <h1 className="font-heading text-4xl font-bold tracking-[0em] text-[var(--text-color)] mb-4">
           Project Not Found
         </h1>
         <p className="text-sm text-[var(--muted-color)] mb-8">
@@ -80,7 +80,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ slug, onNavigate }
             <span>08</span>
           </div>
 
-          <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.04em] text-[var(--text-color)] uppercase leading-[0.9] mb-6">
+          <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.02em] text-[var(--text-color)] uppercase leading-[0.9] mb-6">
             {project.name}
           </h1>
 
@@ -177,7 +177,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ slug, onNavigate }
             <span className="text-xs uppercase tracking-[0.08em] text-[var(--muted-color)] block mb-1">
               Next project
             </span>
-            <span className="font-heading text-xl sm:text-2xl md:text-3xl font-bold tracking-[-0.01em] text-[var(--text-color)] group-hover:text-[var(--accent-color)] transition-colors inline-flex items-center gap-2">
+            <span className="font-heading text-xl sm:text-2xl md:text-3xl font-bold tracking-[0em] text-[var(--text-color)] group-hover:text-[var(--accent-color)] transition-colors inline-flex items-center gap-2">
               <span>{nextProject.name}</span>
               <span className="transition-transform group-hover:translate-x-1">→</span>
             </span>
