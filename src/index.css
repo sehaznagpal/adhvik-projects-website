@@ -497,11 +497,13 @@ html.dark .client-card { box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 80px;
-  padding-bottom: 80px;
+  padding-top: clamp(40px, 8vh, 80px);
+  padding-bottom: clamp(40px, 8vh, 80px);
 }
+.about-statement { font-size: max(22px, min(clamp(26px, 3vw, 48px), 5.2vh)); }
+.about-strong { font-weight: 600; }
 .about-btn {
-  margin-top: 48px;
+  margin-top: clamp(24px, 4vh, 40px);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -534,7 +536,7 @@ html.dark .client-card { box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
   .about-btn:focus-visible .about-btn-arrow { transform: none; }
 }
 .about-pill {
-  margin-right: 0.25em;
+  margin: 0 0.25em;
   width: 2em;
   height: 0.9em;
   vertical-align: -0.08em;

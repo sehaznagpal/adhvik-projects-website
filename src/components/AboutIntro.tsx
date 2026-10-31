@@ -1,27 +1,30 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 
+// [[accent]] = italic rose phrase, <<strong>> = Raleway 600, {{name}} = inline image pill
 const SOURCE =
-  'Adhvik Projects is a [[turnkey design and build]] firm. Since 2013, we have taken more than [[900 spaces]] from site survey to handover, covering design, in-house fabrication, {{workshop}} civil works, MEP and fit-out, {{store}} delivered by one team with a [[single point of accountability]].';
+  'Adhvik Projects is a <<project management company>> delivering [[turnkey design and build]]. Since 2013, we have taken more than [[900 spaces]] from site survey to handover, covering design, in-house fabrication, {{workshop}} civil works, MEP and fit-out, {{store}} delivered by one team with a [[single point of accountability]].';
 
 const PILLS: Record<string, string> = {
   workshop: '/images/workshop-01.jpg',
   store: '/images/wardrobe-gwalior-03.jpg',
 };
 
-const PLAIN_TEXT = SOURCE.replace(/\{\{\w+\}\}\s?/g, '').replace(/\[\[|\]\]/g, '');
+const PLAIN_TEXT = SOURCE.replace(/\{\{\w+\}\}\s?/g, '').replace(/\[\[|\]\]|<<|>>/g, '');
 
-type Token = { kind: 'word'; text: string; key: boolean } | { kind: 'pill'; name: string };
+type Token = { kind: 'word'; text: string; key: boolean; strong?: boolean } | { kind: 'pill'; name: string };
 
 function tokenize(): Token[] {
   const tokens: Token[] = [];
-  const re = /\[\[(.+?)\]\]([.,]?)|\{\{(\w+)\}\}|(\S+)/g;
+  const re = /\[\[(.+?)\]\]([.,]?)|<<(.+?)>>|\{\{(\w+)\}\}|(\S+)/g;
   let m: RegExpExecArray | null;
   while ((m = re.exec(SOURCE))) {
     if (m[1]) {
       const words = (m[1] + m[2]).split(' ');
       words.forEach((w) => tokens.push({ kind: 'word', text: w, key: true }));
-    } else if (m[3]) tokens.push({ kind: 'pill', name: m[3] });
-    else if (m[4]) tokens.push({ kind: 'word', text: m[4], key: false });
+    } else if (m[3]) {
+      m[3].split(' ').forEach((w) => tokens.push({ kind: 'word', text: w, key: false, strong: true }));
+    } else if (m[4]) tokens.push({ kind: 'pill', name: m[4] });
+    else if (m[5]) tokens.push({ kind: 'word', text: m[5], key: false });
   }
   return tokens;
 }
@@ -115,20 +118,16 @@ export const AboutIntro: React.FC = () => {
       id="about-intro"
       className="about-section max-w-[1440px] mx-auto px-5 md:px-10 lg:px-14 scroll-mt-20"
     >
-      <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted-color)] block mb-6 md:mb-8 text-center">
-        About us
-      </span>
-
       <p className="sr-only">{PLAIN_TEXT}</p>
       <p
         ref={textRef}
         aria-hidden="true"
-        className="about-statement font-medium text-[clamp(1.625rem,3.4vw,3.25rem)] leading-[1.2] max-w-[22ch] max-sm:max-w-none mx-auto text-center text-[var(--text-color)]"
+        className="about-statement font-medium leading-[1.2] max-w-[30ch] max-sm:max-w-none mx-auto text-center text-[var(--text-color)]"
       >
         {groups.map((g, i) => {
           const unit = (tok: Token, k: number) =>
             tok.kind === 'word' ? (
-              <span key={k} data-unit className={`about-unit ${tok.key ? 'about-key font-serif-italic' : ''}`}>
+              <span key={k} data-unit className={`about-unit ${tok.key ? 'about-key font-serif-italic' : ''} ${tok.strong ? 'about-strong' : ''}`}>
                 {tok.text}
               </span>
             ) : (
@@ -136,14 +135,17 @@ export const AboutIntro: React.FC = () => {
                 <img src={PILLS[tok.name]} alt="" loading="lazy" />
               </span>
             );
-          // A pill never starts a line on its own: it is kept with the word that follows
+          // A pill never starts a line on its own: it is kept with the word that follows.
+          // Its only spacing is its own 0.25em margins, so no space characters sit next to it.
+          const nextIsPill = groups[i + 1]?.[0].kind === 'pill';
           return g.length > 1 ? (
             <React.Fragment key={i}>
               <span className="whitespace-nowrap">{g.map(unit)}</span>{' '}
             </React.Fragment>
           ) : (
             <React.Fragment key={i}>
-              {unit(g[0], 0)}{' '}
+              {unit(g[0], 0)}
+              {nextIsPill ? <wbr /> : ' '}
             </React.Fragment>
           );
         })}
