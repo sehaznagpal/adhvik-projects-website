@@ -6,7 +6,7 @@
   --color-ink: #141414;
   --color-muted: #6B6660;
   --color-hairline: #D6D0C4;
-  --color-accent: #A8322D;
+  --color-accent: #7A1E24;
   
   --font-heading: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-body: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -19,16 +19,18 @@
   --text-color: #141414;
   --muted-color: #6B6660;
   --border-color: #D6D0C4;
-  --accent-color: #A8322D;
+  --accent-color: #7A1E24;
+  --accent-fill: #7A1E24;
+  --on-accent: #F4F1EA;
 }
 
 html.dark {
-  --bg-color: #121110;
-  --surface-color: #1C1A18;
-  --text-color: #EDE9E1;
-  --muted-color: #9A948B;
-  --border-color: #2E2B28;
-  --accent-color: #E0675C;
+  --bg-color: #120D0D;
+  --surface-color: #1C1414;
+  --text-color: #EFE9E4;
+  --muted-color: #A0948F;
+  --border-color: #2E2222;
+  --accent-color: #D98A8E;
 }
 
 html {
@@ -111,9 +113,9 @@ a[href^="tel:"] {
   font-size: 1.05em;
   letter-spacing: 0;
 }
-.wordmark-animated .wordmark-a { animation: wm-rise 400ms 0ms cubic-bezier(0.16, 1, 0.3, 1) both; }
-.wordmark-animated .wordmark-line { animation: wm-draw 400ms 300ms ease-out both; }
-.wordmark-animated .wordmark-p { animation: wm-fade 300ms 600ms ease-out both; }
+.wordmark-animated .wordmark-a { animation: wm-rise 600ms 0ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+.wordmark-animated .wordmark-line { animation: wm-draw 550ms 450ms ease-out both; }
+.wordmark-animated .wordmark-p { animation: wm-fade 500ms 900ms ease-out both; }
 @keyframes wm-rise {
   from { opacity: 0; transform: translateY(0.4em); }
   to { opacity: 1; transform: none; }
@@ -147,7 +149,23 @@ a[href^="tel:"] {
   letter-spacing: 0.1em;
   line-height: 1;
 }
-.loader-exit { animation: loader-slide 600ms cubic-bezier(0.65, 0, 0.35, 1) forwards; }
+.loader-skip {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: inherit;
+  opacity: 0.6;
+  background: none;
+  border: 0;
+  padding: 8px;
+  cursor: pointer;
+}
+.loader-skip:hover { opacity: 1; }
+.loader-exit { animation: loader-slide 700ms cubic-bezier(0.65, 0, 0.35, 1) forwards; }
 .loader-fade { animation: loader-out 300ms ease-out forwards; }
 @keyframes loader-slide { to { transform: translateY(-100%); } }
 @keyframes loader-out { to { opacity: 0; } }
@@ -199,4 +217,34 @@ a[href^="tel:"] {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* About statement: scroll-scrubbed word reveal (--t is set from JS, 0 to 1) */
+.about-unit {
+  --t: 1;
+  display: inline-block;
+  opacity: calc(0.15 + 0.85 * var(--t));
+  will-change: opacity;
+}
+.about-key {
+  font-size: 1.08em;
+  color: color-mix(in srgb, var(--accent-color) calc(var(--t) * 100%), var(--text-color));
+}
+.about-pill {
+  width: 2em;
+  height: 0.9em;
+  vertical-align: -0.08em;
+  border-radius: 999px;
+  overflow: hidden;
+  transform: scale(calc(0.6 + 0.4 * var(--t)));
+  will-change: transform, opacity;
+}
+.about-pill img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+@media (prefers-reduced-motion: reduce) {
+  .about-unit { --t: 1 !important; }
 }

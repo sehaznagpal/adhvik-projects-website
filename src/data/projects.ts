@@ -214,48 +214,6 @@ export const PROJECTS: Project[] = [
       },
     ],
   },
-  {
-    number: "08",
-    slug: "fern-hotel-bhimtal",
-    name: "The Fern Hotel",
-    location: "Bhimtal, Nainital, Uttarakhand",
-    area: "1,20,000 sq ft",
-    type: "Hospitality",
-    category: "hotels-banquet-halls",
-    scope: "Design + turnkey execution",
-    coverImage: "/images/fern-hotel-bhimtal-01.jpg",
-    coverAlt: "The Fern Hotel, Bhimtal, resort illuminated evening panoramic exterior",
-    gallery: [
-      {
-        src: "/images/fern-hotel-bhimtal-02.jpg",
-        alt: "The Fern Hotel, open terrace dining pavilion with mountain valley views",
-      },
-      {
-        src: "/images/fern-hotel-bhimtal-03.jpg",
-        alt: "The Fern Hotel, luxury guest bedroom suite featuring vaulted timber ceiling",
-      },
-      {
-        src: "/images/fern-hotel-bhimtal-04.jpg",
-        alt: "The Fern Hotel, grand banquet and conference hall with layered ceiling lighting",
-      },
-      {
-        src: "/images/fern-hotel-bhimtal-05.jpg",
-        alt: "The Fern Hotel, fine dining restaurant with custom chandeliers and marble flooring",
-      },
-      {
-        src: "/images/fern-hotel-bhimtal-06.jpg",
-        alt: "The Fern Hotel, recreation lounge with custom woodwork and French armchairs",
-      },
-      {
-        src: "/images/fern-hotel-bhimtal-07.jpg",
-        alt: "The Fern Hotel, landscaped hill gazebo pavilion with mountain backdrop",
-      },
-      {
-        src: "/images/fern-hotel-bhimtal-08.jpg",
-        alt: "The Fern Hotel, manicured step lawns and stone paved garden promenade",
-      },
-    ],
-  },
 ];
 
 export const WORKSHOP_IMAGES = [
@@ -300,11 +258,11 @@ export const HERO_FEATURED_PHOTOS = [
     alt: "Wardrobe retail facade in Gwalior",
   },
   {
-    src: "/images/fern-hotel-bhimtal-01.jpg",
-    slug: "fern-hotel-bhimtal",
-    label: "The Fern Hotel",
-    location: "Bhimtal",
-    alt: "The Fern Hotel exterior in Bhimtal",
+    src: "/images/stanmax-dehradun-05.jpg",
+    slug: "stanmax-dehradun",
+    label: "Stanmax",
+    location: "Dehradun",
+    alt: "Stanmax flagship retail store interior in Dehradun",
   },
   {
     src: "/images/global-republic-rajouri-garden-01.jpg",
@@ -348,20 +306,6 @@ export const TEAM_ROLES = [
   "Execution Team",
   "Contractors",
   "Suppliers",
-];
-
-export const TICKER_ITEMS = [
-  "900+ PROJECTS DELIVERED",
-  "20 STATES",
-  "INTERNATIONAL: UAE & SAUDI ARABIA",
-  "TURNKEY SOLUTIONS",
-  "RETAIL STORES (MBO & EBO)",
-  "HOTELS & BANQUET HALLS",
-  "GYMS",
-  "FOOD COURTS & CAFETERIAS",
-  "CORPORATE OFFICES",
-  "EXHIBITIONS",
-  "IN-HOUSE FURNITURE WORKSHOP",
 ];
 
 export const CONTACT_INFO = {

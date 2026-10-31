@@ -13,7 +13,7 @@ interface NavigationProps {
 const PREVIEW_IMAGES: Record<string, { src: string; title: string }> = {
   work: { src: '/images/wardrobe-gwalior-01.jpg', title: 'Wardrobe, Gwalior' },
   about: { src: '/images/workshop-06.jpg', title: 'Furniture Workshop' },
-  contact: { src: '/images/fern-hotel-bhimtal-01.jpg', title: 'The Fern Hotel' },
+  contact: { src: '/images/madame-jeddah-02.jpg', title: 'Madame, Jeddah' },
 };
 
 export const Navigation: React.FC<NavigationProps> = ({
@@ -252,7 +252,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 >
                   <span>Work</span>
                   <span className="text-[14px] tracking-[0.04em] font-normal leading-normal text-[var(--muted-color)] group-hover:text-[var(--accent-color)] transition-colors pt-2">
-                    (08)
+                    (07)
                   </span>
                 </button>
               </div>

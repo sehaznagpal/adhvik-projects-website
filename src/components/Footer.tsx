@@ -26,11 +26,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <div
         role="status"
         aria-live="polite"
-        className={`fixed bottom-6 right-6 z-50 bg-[var(--text-color)] text-[var(--bg-color)] px-4 py-2.5 text-xs font-medium uppercase tracking-[0.08em] flex items-center gap-2 shadow-lg transition-all duration-300 ${
+        className={`fixed bottom-6 right-6 z-50 bg-[var(--accent-fill)] text-[var(--on-accent)] px-4 py-2.5 text-xs font-medium uppercase tracking-[0.08em] flex items-center gap-2 shadow-lg transition-all duration-300 ${
           copied ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
         }`}
       >
-        <Check size={14} className="text-[var(--accent-color)]" />
+        <Check size={14} />
         <span>Email copied to clipboard</span>
       </div>
 

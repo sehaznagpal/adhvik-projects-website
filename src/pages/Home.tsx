@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Ticker } from '../components/Ticker';
 import { Categories } from '../components/Categories';
+import { AboutIntro } from '../components/AboutIntro';
 import { Wordmark } from '../components/Wordmark';
 import { PROJECTS, HERO_FEATURED_PHOTOS } from '../data/projects';
 import { TAGLINE, DESCRIPTOR } from '../data/brand';
@@ -95,7 +96,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate, introDone = true }) => {
       {/* Floating View Cursor for Desktop */}
       {!isTouchDevice && (
         <div
-          className={`fixed top-0 left-0 pointer-events-none z-50 w-20 h-20 rounded-full bg-[var(--accent-color)] text-white flex items-center justify-center text-xs font-semibold uppercase tracking-[0.08em] shadow-xl transition-opacity duration-250 ease-out ${
+          className={`fixed top-0 left-0 pointer-events-none z-50 w-20 h-20 rounded-full bg-[var(--accent-fill)] text-[var(--on-accent)] flex items-center justify-center text-xs font-semibold uppercase tracking-[0.08em] shadow-xl transition-opacity duration-250 ease-out ${
             isHoveringImage ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
           }`}
           style={{
@@ -169,6 +170,8 @@ export const Home: React.FC<HomeProps> = ({ onNavigate, introDone = true }) => {
         <Ticker />
       </section>
 
+      <AboutIntro />
+
       <Categories />
 
       {/* WORK SECTION (dvdrod style) */}
@@ -184,7 +187,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate, introDone = true }) => {
             </h2>
           </div>
           <div className="text-xs md:text-sm text-[var(--muted-color)] tracking-[0.02em]">
-            08 Retail and Hospitality Commissions
+            07 Selected Commissions
           </div>
         </div>
 

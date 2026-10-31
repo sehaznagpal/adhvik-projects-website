@@ -6,13 +6,17 @@ interface LoaderProps {
   onDone: () => void;
 }
 
-const COUNT_MS = 1200;
+const COUNT_MS = 2600;
+const HOLD_MS = 800;
 const MAX_WAIT_MS = 3500;
-const EXIT_MS = 600;
+const EXIT_MS = 700;
+const REDUCED_HOLD_MS = 1000;
+const REDUCED_EXIT_MS = 300;
 
 export const Loader: React.FC<LoaderProps> = ({ imageSrcs, onDone }) => {
   const [percent, setPercent] = useState(0);
   const [exiting, setExiting] = useState(false);
+  const skipRef = useRef<() => void>(() => {});
   const reduced = useRef(
     typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
   ).current;
@@ -29,7 +33,7 @@ export const Loader: React.FC<LoaderProps> = ({ imageSrcs, onDone }) => {
   useEffect(() => {
     let cancelled = false;
     let imagesReady = false;
-    let counted = false;
+    let held = false;
     let exited = false;
     const timers: number[] = [];
     let raf = 0;
@@ -38,12 +42,15 @@ export const Loader: React.FC<LoaderProps> = ({ imageSrcs, onDone }) => {
     const exit = () => {
       if (exited || cancelled) return;
       exited = true;
+      cancelAnimationFrame(raf);
+      setPercent(100);
       setExiting(true);
-      timers.push(window.setTimeout(() => !cancelled && onDone(), reduced ? 300 : EXIT_MS));
+      timers.push(window.setTimeout(() => !cancelled && onDone(), reduced ? REDUCED_EXIT_MS : EXIT_MS));
     };
     const tryExit = () => {
-      if (counted && imagesReady) exit();
+      if (held && imagesReady) exit();
     };
+    skipRef.current = exit;
 
     // Wait for the hero images, but never longer than MAX_WAIT_MS
     let pending = imageSrcs.length;
@@ -64,8 +71,6 @@ export const Loader: React.FC<LoaderProps> = ({ imageSrcs, onDone }) => {
     timers.push(
       window.setTimeout(() => {
         imagesReady = true;
-        counted = true;
-        setPercent(100);
         tryExit();
       }, MAX_WAIT_MS)
     );
@@ -74,9 +79,9 @@ export const Loader: React.FC<LoaderProps> = ({ imageSrcs, onDone }) => {
       setPercent(100);
       timers.push(
         window.setTimeout(() => {
-          counted = true;
+          held = true;
           tryExit();
-        }, 400)
+        }, REDUCED_HOLD_MS)
       );
     } else {
       const tick = (now: number) => {
@@ -86,17 +91,28 @@ export const Loader: React.FC<LoaderProps> = ({ imageSrcs, onDone }) => {
         if (t < 1) {
           raf = requestAnimationFrame(tick);
         } else {
-          counted = true;
-          tryExit();
+          timers.push(
+            window.setTimeout(() => {
+              held = true;
+              tryExit();
+            }, HOLD_MS)
+          );
         }
       };
       raf = requestAnimationFrame(tick);
     }
 
+    // Skip: any key press or tap/click anywhere
+    const skip = () => exit();
+    window.addEventListener('keydown', skip);
+    window.addEventListener('pointerdown', skip);
+
     return () => {
       cancelled = true;
       cancelAnimationFrame(raf);
       timers.forEach(clearTimeout);
+      window.removeEventListener('keydown', skip);
+      window.removeEventListener('pointerdown', skip);
     };
   }, [imageSrcs, onDone, reduced]);
 
@@ -107,6 +123,14 @@ export const Loader: React.FC<LoaderProps> = ({ imageSrcs, onDone }) => {
     >
       <Wordmark animated={!reduced} className="loader-wordmark" />
       <div className="loader-percent">{percent}%</div>
+      <button
+        type="button"
+        tabIndex={-1}
+        onClick={() => skipRef.current()}
+        className="loader-skip"
+      >
+        Skip
+      </button>
     </div>
   );
 };

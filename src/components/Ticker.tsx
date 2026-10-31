@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { TICKER_ITEMS } from '../data/projects';
+import { BRANDS } from '../data/brands';
 
 export const Ticker: React.FC = () => {
   const [speedMultiplier, setSpeedMultiplier] = useState(1);
@@ -51,37 +51,37 @@ export const Ticker: React.FC = () => {
   const baseDuration = 38;
   const currentDuration = baseDuration / speedMultiplier;
 
+  const renderBrands = (prefix: string) =>
+    BRANDS.map((item, idx) => (
+      <React.Fragment key={`${prefix}-${idx}`}>
+        {idx % 2 === 0 ? (
+          <span className="px-5 md:px-7 font-heading-plain uppercase tracking-[0.08em] text-sm md:text-base">
+            {item}
+          </span>
+        ) : (
+          <span className="px-5 md:px-7 font-serif-italic text-xl md:text-2xl">{item}</span>
+        )}
+        <span className="text-[var(--accent-color)] text-xs" aria-hidden="true">✦</span>
+      </React.Fragment>
+    ));
+
   return (
     <div
-      aria-label="Capabilities and delivery marquee"
-      className="w-full border-y border-[var(--border-color)] bg-[var(--bg-color)] py-3.5 md:py-4 overflow-hidden select-none transition-colors duration-300"
+      aria-label="Brands we've built for"
+      className="w-full border-y border-[var(--border-color)] bg-[var(--bg-color)] pt-5 pb-4 md:pt-6 md:pb-5 overflow-hidden select-none transition-colors duration-300"
     >
+      <p className="max-w-[1440px] mx-auto px-5 md:px-10 lg:px-14 mb-3 text-xs uppercase tracking-[0.08em] text-[var(--muted-color)] font-medium">
+        Brands we've built for
+      </p>
       <div
-        className="animate-ticker flex items-center whitespace-nowrap text-xs md:text-sm font-medium tracking-[0.08em] text-[var(--text-color)] uppercase"
+        className="animate-ticker flex items-center whitespace-nowrap text-[var(--text-color)]"
         style={{
           animationDuration: `${currentDuration}s`,
           animationDirection: isReverse ? 'reverse' : 'normal',
         }}
       >
-        {/* First repetition */}
-        <div className="flex items-center">
-          {TICKER_ITEMS.map((item, idx) => (
-            <React.Fragment key={`ticker-1-${idx}`}>
-              <span className="px-4 md:px-6">{item}</span>
-              <span className="text-[var(--accent-color)] text-xs" aria-hidden="true">✦</span>
-            </React.Fragment>
-          ))}
-        </div>
-
-        {/* Second repetition for smooth infinite loop */}
-        <div className="flex items-center" aria-hidden="true">
-          {TICKER_ITEMS.map((item, idx) => (
-            <React.Fragment key={`ticker-2-${idx}`}>
-              <span className="px-4 md:px-6">{item}</span>
-              <span className="text-[var(--accent-color)] text-xs">✦</span>
-            </React.Fragment>
-          ))}
-        </div>
+        <div className="flex items-center">{renderBrands('b1')}</div>
+        <div className="flex items-center" aria-hidden="true">{renderBrands('b2')}</div>
       </div>
     </div>
   );

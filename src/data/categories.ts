@@ -16,7 +16,6 @@ export const CATEGORIES: Category[] = [
     slug: "hotels-banquet-halls",
     name: "Hotels / Banquet Halls",
     line: "Rooms, lobbies, dining and event spaces.",
-    image: "/images/fern-hotel-bhimtal-03.jpg",
   },
   {
     slug: "gyms",
