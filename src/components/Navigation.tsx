@@ -11,7 +11,7 @@ interface NavigationProps {
 }
 
 const PREVIEW_IMAGES: Record<string, { src: string; title: string }> = {
-  work: { src: '/images/wardrobe-gwalior-01.jpg', title: 'Wardrobe, Gwalior' },
+  work: { src: '/images/wardrobe-gwalior-02.jpg', title: 'Wardrobe, Gwalior' },
   about: { src: '/images/workshop-06.jpg', title: 'Furniture Workshop' },
   contact: { src: '/images/madame-jeddah-02.jpg', title: 'Madame, Jeddah' },
 };

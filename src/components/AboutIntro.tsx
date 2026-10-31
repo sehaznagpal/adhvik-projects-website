@@ -5,7 +5,7 @@ const SOURCE =
 
 const PILLS: Record<string, string> = {
   workshop: '/images/workshop-01.jpg',
-  store: '/images/wardrobe-gwalior-02.jpg',
+  store: '/images/wardrobe-gwalior-03.jpg',
 };
 
 const PLAIN_TEXT = SOURCE.replace(/\{\{\w+\}\}\s?/g, '').replace(/\[\[|\]\]/g, '');

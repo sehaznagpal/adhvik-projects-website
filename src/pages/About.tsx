@@ -83,8 +83,8 @@ export const About: React.FC = () => {
               projects completed across 20 states and work delivered in the UAE and Saudi Arabia.
             </p>
             <p>
-              Our work spans large-format retail (multi-brand, exclusive brand and high-end stores),
-              commercial buildings, hotels and resorts, and corporate interiors. Every project starts
+              Our work spans high-end retail stores, premium residences, restaurants, hotels and cafeterias,
+              banquet halls, gyms, corporate offices and exhibitions. Every project starts
               with research: understanding the site, the brand and the people who'll use the space.
               Our approach is modern and contemporary: simple, useful spaces that respond to local
               conditions and culture.

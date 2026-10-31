@@ -39,8 +39,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         {/* Big Call to Action line */}
         <div className="mb-16 md:mb-24">
           <h2 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.02em] text-[var(--text-color)] leading-[0.95]">
-            Have a space in mind?{' '}
-            <span className="font-serif-italic font-light text-[var(--accent-color)] block sm:inline">
+            <span className="block">Have a space in mind?</span>
+            <span className="font-serif-italic font-light text-[var(--accent-color)] block">
               Let's build it.
             </span>
           </h2>
@@ -138,7 +138,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Wordmark + copyright */}
           <div className="flex flex-col items-start gap-2 lg:items-end text-xs">
             <span className="text-xl text-[var(--text-color)]"><Wordmark /></span>
-            © 2026 Adhvik Projects · {DESCRIPTOR}. All rights reserved.
+            © 2026 ADHVIK PROJECTS · {DESCRIPTOR}. All rights reserved.
           </div>
         </div>
       </div>

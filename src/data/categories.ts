@@ -7,25 +7,31 @@ export interface Category {
 
 export const CATEGORIES: Category[] = [
   {
-    slug: "retail-stores",
-    name: "Retail Stores (MBO & EBO)",
-    line: "Multi-brand and exclusive brand outlets, from flagship to mall store.",
-    image: "/images/wardrobe-gwalior-02.jpg",
+    slug: "high-end-retail",
+    name: "High-End Retail Stores",
+    line: "Flagship and premium brand stores, from shopfront to shelf.",
+    image: "/images/wardrobe-gwalior-01.jpg",
   },
   {
-    slug: "hotels-banquet-halls",
-    name: "Hotels / Banquet Halls",
-    line: "Rooms, lobbies, dining and event spaces.",
+    slug: "premium-residences",
+    name: "Premium Residences",
+    line: "Turnkey homes, delivered from structure to finish.",
+  },
+  {
+    slug: "restaurants-hotels-cafeterias",
+    name: "Restaurants, Hotels & Cafeterias",
+    line: "Hospitality and dining spaces built for high footfall.",
+  },
+  {
+    slug: "banquet-halls",
+    name: "Banquet Halls",
+    line: "Event spaces designed, built and handed over ready to host.",
   },
   {
     slug: "gyms",
     name: "Gyms",
     line: "Fitness floors, studios and locker rooms.",
-  },
-  {
-    slug: "food-courts-cafeterias",
-    name: "Food Courts & Cafeterias",
-    line: "High-footfall dining, built to last.",
+    image: "/images/anytime-fitness-karol-bagh-01.jpg",
   },
   {
     slug: "corporate-offices",

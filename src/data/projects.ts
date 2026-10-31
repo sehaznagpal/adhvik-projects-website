@@ -22,28 +22,78 @@ export const PROJECTS: Project[] = [
   {
     slug: "wardrobe-gwalior",
     name: "Wardrobe",
-    location: "Lashkar, Gwalior, MP",
-    category: "retail-stores",
+    location: "Lashkar, Gwalior",
+    category: "high-end-retail",
     images: [
       "wardrobe-gwalior-01.jpg",
       "wardrobe-gwalior-02.jpg",
       "wardrobe-gwalior-03.jpg",
       "wardrobe-gwalior-04.jpg",
       "wardrobe-gwalior-05.jpg",
+      "wardrobe-gwalior-06.jpg",
+      "wardrobe-gwalior-07.jpg",
+      "wardrobe-gwalior-08.jpg",
     ],
     imageAlts: [
+      "Wardrobe, Lashkar, Gwalior, store façade lit at night",
       "Wardrobe, Gwalior, store façade and street entrance in Lashkar",
       "Wardrobe, reception and bespoke monolithic billing counter with geometric textured ceiling",
       "Wardrobe, formal menswear showcase with ambient coffered ceiling lighting",
       "Wardrobe, luxury lounge seating area with custom display racks and brass highlights",
       "Wardrobe, custom perimeter shelving and bespoke wardrobe architectural millwork",
+      "Wardrobe, Gwalior, store façade by day",
+      "Wardrobe, Gwalior, glazed entrance and signage",
+    ],
+  },
+  {
+    slug: "mi-arcus",
+    name: "Mi Arcus",
+    location: "India",
+    category: "high-end-retail",
+    images: [
+      "mi-arcus-01.jpg",
+      "mi-arcus-02.jpg",
+      "mi-arcus-03.jpg",
+    ],
+    imageAlts: [
+      "Mi Arcus, India, store entrance",
+      "Mi Arcus, India, store interior",
+      "Mi Arcus, India, kids apparel and toy display",
+    ],
+  },
+  {
+    slug: "anytime-fitness-karol-bagh",
+    name: "Anytime Fitness",
+    location: "Karol Bagh, Delhi",
+    category: "gyms",
+    images: [
+      "anytime-fitness-karol-bagh-01.jpg",
+      "anytime-fitness-karol-bagh-02.jpg",
+    ],
+    imageAlts: [
+      "Anytime Fitness, Karol Bagh, cardio floor",
+      "Anytime Fitness, Karol Bagh, strength and free weights area",
+    ],
+  },
+  {
+    slug: "kuber",
+    name: "Kuber",
+    location: "India",
+    category: "high-end-retail",
+    images: [
+      "kuber-01.jpg",
+      "kuber-02.jpg",
+    ],
+    imageAlts: [
+      "Kuber, India, store interior with timber baffle ceiling",
+      "Kuber, India, shopping aisle and billing counter",
     ],
   },
   {
     slug: "stanmax-dehradun",
     name: "Stanmax",
     location: "Rajpur Road, Dehradun",
-    category: "retail-stores",
+    category: "high-end-retail",
     images: [
       "stanmax-dehradun-05.jpg",
       "stanmax-dehradun-01.jpg",
@@ -63,7 +113,7 @@ export const PROJECTS: Project[] = [
     slug: "madame-jeddah",
     name: "Madame",
     location: "Al Andalus Mall, Jeddah, KSA",
-    category: "retail-stores",
+    category: "high-end-retail",
     images: [
       "madame-jeddah-02.jpg",
       "madame-jeddah-01.jpg",
@@ -79,7 +129,7 @@ export const PROJECTS: Project[] = [
     slug: "global-republic-mohali",
     name: "Global Republic",
     location: "Bestech, Mohali",
-    category: "retail-stores",
+    category: "high-end-retail",
     images: [
       "global-republic-mohali-01.jpg",
       "global-republic-mohali-02.jpg",
@@ -99,7 +149,7 @@ export const PROJECTS: Project[] = [
     slug: "global-republic-rajouri-garden",
     name: "Global Republic",
     location: "Rajouri Garden Main Market, Delhi",
-    category: "retail-stores",
+    category: "high-end-retail",
     images: [
       "global-republic-rajouri-garden-01.jpg",
       "global-republic-rajouri-garden-02.jpg",
@@ -119,7 +169,7 @@ export const PROJECTS: Project[] = [
     slug: "camla-gurgaon",
     name: "Camla",
     location: "Ambience Mall, Gurugram",
-    category: "retail-stores",
+    category: "high-end-retail",
     images: [
       "camla-gurgaon-01.jpg",
       "camla-gurgaon-02.jpg",
@@ -139,7 +189,7 @@ export const PROJECTS: Project[] = [
     slug: "madame-gwalior",
     name: "Madame",
     location: "City Centre, Gwalior",
-    category: "retail-stores",
+    category: "high-end-retail",
     images: [
       "madame-gwalior-01.jpg",
       "madame-gwalior-02.jpg",
@@ -153,22 +203,24 @@ export const PROJECTS: Project[] = [
       "Madame, vertical column shelving and color-graded knitwear merchandise presentation",
     ],
   },
-  { slug: "anytime-fitness", name: "Anytime Fitness", location: "India", category: "gyms", images: [] },
-  { slug: "libas", name: "Libas", location: "India", category: "retail-stores", images: [] },
-  { slug: "manyavar", name: "Manyavar", location: "India", category: "retail-stores", images: [] },
-  { slug: "jockey", name: "Jockey", location: "India", category: "retail-stores", images: [] },
-  { slug: "paduka", name: "Paduka", location: "India", category: "retail-stores", images: [] },
-  { slug: "gypsy", name: "Gypsy", location: "India", category: "retail-stores", images: [] },
-  { slug: "shri-ram-hari-ram-jewellers", name: "Shri Ram Hari Ram Jewellers", location: "India", category: "retail-stores", images: [] },
-  { slug: "hp", name: "HP", location: "Vegas Mall, Dwarka, Delhi", category: "retail-stores", images: [] },
-  { slug: "kuber", name: "Kuber", location: "India", category: "retail-stores", images: [] },
-  { slug: "subhash-pro", name: "Subhash Pro", location: "Gwalior", category: "retail-stores", images: [] },
-  { slug: "anand-plaza-mart", name: "Anand Plaza Mart", location: "India", category: "retail-stores", images: [] },
-  { slug: "inara", name: "Inara", location: "Indore", category: "retail-stores", images: [] },
-  { slug: "raman-timber", name: "Raman Timber", location: "India", category: "retail-stores", images: [] },
-  { slug: "shagun-wooltex", name: "Shagun Wooltex", location: "India", category: "retail-stores", images: [] },
-  { slug: "topone", name: "TopOne", location: "Rajouri Garden, Delhi", category: "retail-stores", images: [] },
-  { slug: "tiara", name: "Tiara", location: "India", category: "retail-stores", images: [] },
+  {
+    slug: "shri-ram-hari-ram-jewellers",
+    name: "Shri Ram Hari Ram Jewellers",
+    location: "India",
+    category: "high-end-retail",
+    images: [
+      "shri-ram-hari-ram-jewellers-01.jpg",
+      "shri-ram-hari-ram-jewellers-02.jpg",
+    ],
+    imageAlts: [
+      "Shri Ram Hari Ram Jewellers, India, jewellery showroom display counters",
+      "Shri Ram Hari Ram Jewellers, India, showroom interior with display niches",
+    ],
+  },
+  { slug: "libas", name: "Libas", location: "India", category: "high-end-retail", images: [] },
+  { slug: "manyavar", name: "Manyavar", location: "India", category: "high-end-retail", images: [] },
+  { slug: "jockey", name: "Jockey", location: "India", category: "high-end-retail", images: [] },
+  { slug: "hp", name: "HP", location: "Vegas Mall, Dwarka, Delhi", category: "high-end-retail", images: [] },
 ];
 
 /** Projects with photos get a detail page and a clickable card. */
@@ -209,34 +261,24 @@ export const WORKSHOP_IMAGES = [
   },
 ];
 
+/**
+ * Hero crossfade. Only images 1000px wide or larger belong here.
+ * wardrobe-gwalior-01 (422px), mi-arcus-01 (722px) and the workshop photos (800px or less) are too small.
+ */
 export const HERO_FEATURED_PHOTOS = [
   {
-    src: "/images/wardrobe-gwalior-01.jpg",
-    slug: "wardrobe-gwalior",
-    label: "Wardrobe",
-    location: "Gwalior",
-    alt: "Wardrobe retail facade in Gwalior",
+    src: "/images/anytime-fitness-karol-bagh-01.jpg",
+    slug: "anytime-fitness-karol-bagh",
+    label: "Anytime Fitness",
+    location: "Karol Bagh, Delhi",
+    alt: "Anytime Fitness, Karol Bagh, Delhi, gym floor",
   },
   {
-    src: "/images/stanmax-dehradun-05.jpg",
-    slug: "stanmax-dehradun",
-    label: "Stanmax",
-    location: "Dehradun",
-    alt: "Stanmax flagship retail store interior in Dehradun",
-  },
-  {
-    src: "/images/global-republic-rajouri-garden-01.jpg",
-    slug: "global-republic-rajouri-garden",
-    label: "Global Republic",
-    location: "Delhi",
-    alt: "Global Republic in Rajouri Garden, Delhi",
-  },
-  {
-    src: "/images/camla-gurgaon-01.jpg",
-    slug: "camla-gurgaon",
-    label: "Camla",
-    location: "Gurugram",
-    alt: "Camla store in Ambience Mall, Gurugram",
+    src: "/images/kuber-01.jpg",
+    slug: "kuber",
+    label: "Kuber",
+    location: "India",
+    alt: "Kuber store interior",
   },
 ];
 

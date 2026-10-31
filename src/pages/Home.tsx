@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { CATEGORIES } from '../data/categories';
-import { Ticker } from '../components/Ticker';
+import { Clients } from '../components/Clients';
 import { Categories } from '../components/Categories';
 import { AboutIntro } from '../components/AboutIntro';
 import { Wordmark } from '../components/Wordmark';
@@ -190,7 +190,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate, introDone = true }) => {
 
       {/* INFINITE TICKER MARQUEE */}
       <section className="my-4 md:my-8">
-        <Ticker />
+        <Clients />
       </section>
 
       <AboutIntro />
