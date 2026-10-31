@@ -9,14 +9,22 @@ const STEPS = [
   { n: '03', title: 'Build', text: 'Our own workshop and execution teams take every project from concept to handover, under one roof.' },
 ];
 
-const STATS = [
+const STATS: { value: number; suffix: string; label: React.ReactNode }[] = [
   { value: 2013, suffix: '', label: 'Founded' },
   { value: 900, suffix: '+', label: 'Projects delivered' },
   { value: 20, suffix: '', label: 'States across India' },
-  { value: 2, suffix: '', label: 'International markets (UAE & Saudi Arabia)' },
+  {
+    value: 2,
+    suffix: '',
+    label: (
+      <>
+        International markets
+        <br />
+        UAE &amp; Saudi Arabia
+      </>
+    ),
+  },
 ];
-
-const CAPABILITIES = ['Design', 'Fabrication', 'Civil works', 'MEP', 'Fit-out', 'In-house workshop'];
 
 const ICONS: Record<string, React.ElementType> = {
   compass: Compass,
@@ -77,9 +85,10 @@ export const About: React.FC = () => {
     const reduced = prefersReducedMotion();
     if (reduced) root.classList.add('shift-fade');
     const update = () => {
-      const header = parseFloat(getComputedStyle(root).getPropertyValue('--header-height')) || 64;
-      const over = hero.getBoundingClientRect().bottom - header;
-      root.style.setProperty('--shift', (reduced ? (over > 0 ? 1 : 0) : Math.min(Math.max(over / 80, 0), 1)).toFixed(3));
+      // 1 while the maroon section fills the screen, easing to 0 as it scrolls away
+      const bottom = hero.getBoundingClientRect().bottom;
+      const p = Math.min(Math.max(bottom / (window.innerHeight * 0.6), 0), 1);
+      root.style.setProperty('--shift', (reduced ? (bottom > window.innerHeight * 0.3 ? 1 : 0) : p).toFixed(3));
     };
     update();
     window.addEventListener('scroll', update, { passive: true });
@@ -126,10 +135,9 @@ export const About: React.FC = () => {
 
   return (
     <main className="w-full">
-      {/* HERO (maroon in both themes) */}
+      {/* HERO + STATS: one maroon screen (in both themes) */}
       <section ref={heroRef} className="about-hero">
-        <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-14">
-          <span className="about-hero-label">About Adhvik Projects</span>
+        <div className="mx-auto w-full max-w-[1440px] px-5 md:px-10 lg:px-14">
           <h1 className="section-heading about-hero-title">
             We design spaces,<br className="hidden md:inline" /> then we build them.
           </h1>
@@ -147,15 +155,10 @@ export const About: React.FC = () => {
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* STATS BAND */}
-      <section className="border-b border-[var(--border-color)] py-14 md:py-20">
-        <div className="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-14">
           <div ref={statsRef} className="stats">
             {STATS.map((s, i) => (
-              <div key={s.label} className="stat">
+              <div key={s.value} className="stat">
                 <div className="stat-num">
                   {counts[i]}
                   {s.suffix}
@@ -164,13 +167,6 @@ export const About: React.FC = () => {
               </div>
             ))}
           </div>
-          <ul className="m-0 mt-12 flex list-none flex-wrap justify-center gap-3 p-0">
-            {CAPABILITIES.map((c) => (
-              <li key={c} className="cap-chip">
-                {c}
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
 
@@ -243,12 +239,12 @@ export const About: React.FC = () => {
             </p>
           </div>
 
-          <div ref={servicesRef} className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div ref={servicesRef} className="service-grid">
             {SERVICE_GROUPS.map((g, i) => {
               const Icon = ICONS[g.icon];
               return (
-                <div key={g.title} data-reveal className="reveal" style={{ ['--d' as string]: `${i * 80}ms` }}>
-                  <article className="service-card h-full">
+                <div key={g.title} data-reveal className="service-slot reveal" style={{ ['--d' as string]: `${i * 80}ms` }}>
+                  <article className="service-card">
                     <div className="flex items-center justify-between">
                       <Icon className="service-icon" size={28} strokeWidth={1.25} aria-hidden="true" />
                       <span className="service-count">
