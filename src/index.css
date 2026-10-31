@@ -446,7 +446,52 @@ html.dark .client-card { box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
   font-size: 1.08em;
   color: color-mix(in srgb, var(--accent-color) calc(var(--t) * 100%), var(--text-color));
 }
+/* Centred, full-height About section */
+.about-section {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+.about-btn {
+  margin-top: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: 1px solid rgb(244 241 234 / 0.4);
+  background: transparent;
+  color: #F4F1EA;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+.about-btn-arrow { transition: transform 200ms ease; }
+.about-btn:hover,
+.about-btn:focus-visible {
+  background: #F4F1EA;
+  color: #4A1418;
+  border-color: #F4F1EA;
+}
+.about-btn:hover .about-btn-arrow,
+.about-btn:focus-visible .about-btn-arrow { transform: translateX(4px); }
+.about-btn:focus-visible { outline: 2px solid #F4F1EA; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .about-btn:hover .about-btn-arrow,
+  .about-btn:focus-visible .about-btn-arrow { transform: none; }
+}
 .about-pill {
+  margin-right: 0.25em;
   width: 2em;
   height: 0.9em;
   vertical-align: -0.08em;

@@ -28,6 +28,16 @@ function tokenize(): Token[] {
 
 export const AboutIntro: React.FC = () => {
   const tokens = useMemo(tokenize, []);
+  const groups = useMemo(() => {
+    const out: Token[][] = [];
+    for (let i = 0; i < tokens.length; i++) {
+      if (tokens[i].kind === 'pill' && tokens[i + 1]) {
+        out.push([tokens[i], tokens[i + 1]]);
+        i++;
+      } else out.push([tokens[i]]);
+    }
+    return out;
+  }, [tokens]);
   const textRef = useRef<HTMLParagraphElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -103,9 +113,9 @@ export const AboutIntro: React.FC = () => {
     <section
       ref={sectionRef}
       id="about-intro"
-      className="py-24 md:py-36 max-w-[1440px] mx-auto px-5 md:px-10 lg:px-14 scroll-mt-20"
+      className="about-section max-w-[1440px] mx-auto px-5 md:px-10 lg:px-14 scroll-mt-20"
     >
-      <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted-color)] block mb-6 md:mb-8">
+      <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted-color)] block mb-6 md:mb-8 text-center">
         About us
       </span>
 
@@ -113,36 +123,48 @@ export const AboutIntro: React.FC = () => {
       <p
         ref={textRef}
         aria-hidden="true"
-        className="about-statement font-medium text-[clamp(1.625rem,3.4vw,3.25rem)] leading-[1.2] max-w-[22ch] sm:max-w-[22ch] max-sm:max-w-none text-[var(--text-color)]"
+        className="about-statement font-medium text-[clamp(1.625rem,3.4vw,3.25rem)] leading-[1.2] max-w-[22ch] max-sm:max-w-none mx-auto text-center text-[var(--text-color)]"
       >
-        {tokens.map((tok, i) =>
-          tok.kind === 'word' ? (
-            <React.Fragment key={i}>
-              <span
-                data-unit
-                className={`about-unit ${tok.key ? 'about-key font-serif-italic' : ''}`}
-              >
+        {groups.map((g, i) => {
+          const unit = (tok: Token, k: number) =>
+            tok.kind === 'word' ? (
+              <span key={k} data-unit className={`about-unit ${tok.key ? 'about-key font-serif-italic' : ''}`}>
                 {tok.text}
-              </span>{' '}
+              </span>
+            ) : (
+              <span key={k} data-unit className="about-unit about-pill">
+                <img src={PILLS[tok.name]} alt="" loading="lazy" />
+              </span>
+            );
+          // A pill never starts a line on its own: it is kept with the word that follows
+          return g.length > 1 ? (
+            <React.Fragment key={i}>
+              <span className="whitespace-nowrap">{g.map(unit)}</span>{' '}
             </React.Fragment>
           ) : (
             <React.Fragment key={i}>
-              <span data-unit className="about-unit about-pill">
-                <img src={PILLS[tok.name]} alt="" loading="lazy" />
-              </span>{' '}
+              {unit(g[0], 0)}{' '}
             </React.Fragment>
-          )
-        )}
+          );
+        })}
       </p>
 
-      <a
-        href="#/about"
-        className="group mt-10 md:mt-14 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted-color)] hover:text-[var(--text-color)] transition-colors"
-      >
+      <a href="#/about" className="about-btn">
         <span>More about us</span>
-        <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
-          →
-        </span>
+        <svg
+          className="about-btn-arrow"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M2 8h11M9 4l4 4-4 4" />
+        </svg>
       </a>
     </section>
   );
