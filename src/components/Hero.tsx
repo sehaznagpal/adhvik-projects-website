@@ -25,7 +25,7 @@ const HEIGHT_SHARE = [0.7, 1, 0.8, 0.95, 0.75];
 const SPEED = 20; // px per second
 
 const DESCRIPTION =
-  'Turnkey solutions across 20 states, the UAE and Saudi Arabia. Est. 2013.';
+  'Turnkey solutions across 20 states. Est. 2013.';
 
 function useDesktop() {
   const query = '(min-width: 768px)';

@@ -143,7 +143,7 @@ export const About: React.FC = () => {
           </h1>
           <p className="about-hero-lead">
             Founded in Delhi in 2013 by Mr. Nagpal, Adhvik Projects is a project management company delivering turnkey
-            spaces across India and the Middle East.
+            spaces pan-India.
           </p>
 
           <div ref={stepsRef} className="about-steps">

@@ -209,8 +209,7 @@ export const Contact: React.FC = () => {
             <div className="lg:col-span-4">
               <h2 className="section-heading mb-3">Office</h2>
               <p className="text-sm md:text-base text-[var(--muted-color)] leading-relaxed mb-6 font-normal">
-                Our central office in Azadpur, Delhi, managing turnkey rollouts across North India and
-                coordinating international projects in the Middle East.
+                Our central office in Azadpur, Delhi, managing turnkey rollouts across locations.
               </p>
               <a
                 href={CONTACT_INFO.googleMapsUrl}

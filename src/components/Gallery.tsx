@@ -178,7 +178,7 @@ export const Gallery: React.FC = () => {
         <span className="eyebrow">Gallery</span>
         <h2 className="section-heading">A look inside</h2>
         <p className="mt-4 text-base text-[var(--muted-color)]">
-          Glimpses of retail stores, fitness spaces and interiors we have designed and delivered across India and abroad.
+          Glimpses of retail stores, fitness spaces and interiors we have designed and delivered pan-India.
         </p>
       </div>
 
