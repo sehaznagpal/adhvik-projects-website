@@ -9,11 +9,11 @@ const STEPS = [
   { n: '03', title: 'Build', text: 'Our own workshop and execution teams take every project from concept to handover, under one roof.' },
 ];
 
-const STATS: { value: number; suffix: string; label: string }[] = [
+const STATS: { value: number; suffix: string; label: string; sub?: string }[] = [
   { value: 2013, suffix: '', label: 'Founded' },
   { value: 900, suffix: '+', label: 'Projects delivered' },
   { value: 20, suffix: '', label: 'States across India' },
-  { value: 2, suffix: '', label: 'Abroad (UAE & Saudi Arabia)' },
+  { value: 2, suffix: '', label: 'Abroad', sub: 'UAE & Saudi Arabia' },
 ];
 
 // Hand-placed tilt and offset for each card, like the client cards on the home page
@@ -146,18 +146,6 @@ export const About: React.FC = () => {
             </p>
           </div>
 
-          <div ref={stepsRef} className="about-steps">
-            {STEPS.map((s, i) => (
-              <div key={s.n} data-reveal className="about-step reveal" style={{ ['--d' as string]: `${i * 100}ms` }}>
-                <h2 className="about-step-title">
-                  <span className="about-step-num">{s.n}</span>
-                  <span>{s.title}</span>
-                </h2>
-                <p className="about-step-text">{s.text}</p>
-              </div>
-            ))}
-          </div>
-
           <div ref={statsRef} className="stat-grid">
             {STATS.map((s, i) => (
               <div key={s.value} data-reveal className="stat-slot reveal" style={{ ['--d' as string]: `${i * 80}ms` }}>
@@ -170,7 +158,20 @@ export const About: React.FC = () => {
                     {s.suffix}
                   </div>
                   <div className="stat-label">{s.label}</div>
+                  {s.sub && <div className="stat-sub">{s.sub}</div>}
                 </div>
+              </div>
+            ))}
+          </div>
+
+          <div ref={stepsRef} className="about-steps">
+            {STEPS.map((s, i) => (
+              <div key={s.n} data-reveal className="about-step reveal" style={{ ['--d' as string]: `${i * 100}ms` }}>
+                <h2 className="about-step-title">
+                  <span className="about-step-num">{s.n}</span>
+                  <span>{s.title}</span>
+                </h2>
+                <p className="about-step-text">{s.text}</p>
               </div>
             ))}
           </div>
