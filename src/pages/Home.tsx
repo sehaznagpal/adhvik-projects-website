@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { CATEGORIES } from '../data/categories';
+import React, { useState, useEffect, useRef } from 'react';
 import { Clients } from '../components/Clients';
 import { Categories } from '../components/Categories';
 import { AboutIntro } from '../components/AboutIntro';
 import { Wordmark } from '../components/Wordmark';
-import { WorkGrid } from '../components/WorkGrid';
+import { Gallery } from '../components/Gallery';
 import { HERO_FEATURED_PHOTOS } from '../data/projects';
 import { TAGLINE, DESCRIPTOR } from '../data/brand';
 
@@ -19,38 +18,6 @@ export const Home: React.FC<HomeProps> = ({ onNavigate, introDone = true }) => {
   const [heroAnimated, setHeroAnimated] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
-  const [category, setCategory] = useState(() => {
-    const c = new URLSearchParams(window.location.search).get('category');
-    return c && CATEGORIES.some((x) => x.slug === c) ? c : 'all';
-  });
-
-  // Keep ?category=slug in the URL so a filtered view is shareable
-  const handleCategoryChange = useCallback((slug: string) => {
-    setCategory(slug);
-    const url = new URL(window.location.href);
-    if (slug === 'all') url.searchParams.delete('category');
-    else url.searchParams.set('category', slug);
-    window.history.replaceState(null, '', url.toString());
-  }, []);
-
-  const handleSelectCategory = useCallback(
-    (slug: string) => {
-      handleCategoryChange(slug);
-      document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
-    },
-    [handleCategoryChange]
-  );
-  const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
-  const [isHoveringImage, setIsHoveringImage] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const cursorRef = useRef<{ x: number; y: number }>({ x: -100, y: -100 });
-  const targetRef = useRef<{ x: number; y: number }>({ x: -100, y: -100 });
-  const animFrameId = useRef<number | null>(null);
-
-  // Detect touch devices
-  useEffect(() => {
-    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
-  }, []);
 
   // Hero entrance plays once the loader has gone
   useEffect(() => {
@@ -90,46 +57,8 @@ export const Home: React.FC<HomeProps> = ({ onNavigate, introDone = true }) => {
     };
   }, []);
 
-  // Smooth custom cursor following logic
-  useEffect(() => {
-    if (isTouchDevice) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      targetRef.current = { x: e.clientX, y: e.clientY };
-    };
-
-    const animateCursor = () => {
-      cursorRef.current.x += (targetRef.current.x - cursorRef.current.x) * 0.18;
-      cursorRef.current.y += (targetRef.current.y - cursorRef.current.y) * 0.18;
-      setCursorPos({ x: cursorRef.current.x, y: cursorRef.current.y });
-      animFrameId.current = requestAnimationFrame(animateCursor);
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    animFrameId.current = requestAnimationFrame(animateCursor);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (animFrameId.current) cancelAnimationFrame(animFrameId.current);
-    };
-  }, [isTouchDevice]);
-
   return (
     <main className="w-full">
-      {/* Floating View Cursor for Desktop */}
-      {!isTouchDevice && (
-        <div
-          className={`fixed top-0 left-0 pointer-events-none z-50 w-20 h-20 rounded-full bg-[var(--accent-fill)] text-[var(--on-accent)] flex items-center justify-center text-xs font-semibold uppercase tracking-[0.08em] shadow-xl transition-opacity duration-250 ease-out ${
-            isHoveringImage ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-          }`}
-          style={{
-            transform: `translate3d(${cursorPos.x - 40}px, ${cursorPos.y - 40}px, 0)`,
-          }}
-        >
-          View
-        </div>
-      )}
-
       {/* HERO SECTION */}
       <section className="relative max-w-[1440px] mx-auto px-5 md:px-10 lg:px-14 pt-28 md:pt-36 pb-16 lg:pt-0 lg:pb-0 lg:min-h-[100svh] flex items-center">
         <div className="w-full grid grid-cols-1 lg:grid-cols-[1fr_30vw_1fr] gap-10 lg:gap-12 items-center">
@@ -195,9 +124,9 @@ export const Home: React.FC<HomeProps> = ({ onNavigate, introDone = true }) => {
 
       <AboutIntro />
 
-      <Categories onSelect={handleSelectCategory} />
+      <Categories />
 
-      <WorkGrid category={category} onCategoryChange={handleCategoryChange} onHoverImage={setIsHoveringImage} />
+      <Gallery />
     </main>
   );
 };

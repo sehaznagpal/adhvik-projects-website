@@ -9,10 +9,8 @@ import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { Contact } from './pages/Contact';
-import { ProjectDetail } from './pages/ProjectDetail';
 import { Loader } from './components/Loader';
 import { HERO_IMAGES } from './pages/Home';
-import { PROJECTS } from './data/projects';
 import { TAGLINE, SITE_NAME } from './data/brand';
 
 const INTRO_KEY = 'adhvik-intro-seen';
@@ -30,24 +28,15 @@ function shouldShowIntro(): boolean {
   return true;
 }
 
-function parseHash(hash: string): { path: string; slug?: string; isWorkScroll?: boolean } {
+type Section = 'what-we-build' | 'gallery';
+
+function parseHash(hash: string): { path: string; scrollTo?: Section } {
   const clean = hash.replace(/^#\/?/, '').trim();
-  if (!clean || clean === '') {
-    return { path: '/' };
-  }
-  if (clean === 'work') {
-    return { path: '/', isWorkScroll: true };
-  }
-  if (clean === 'about') {
-    return { path: '/about' };
-  }
-  if (clean === 'contact') {
-    return { path: '/contact' };
-  }
-  if (clean.startsWith('work/')) {
-    const slug = clean.replace('work/', '');
-    return { path: `/work/${slug}`, slug };
-  }
+  if (clean === 'work') return { path: '/', scrollTo: 'what-we-build' };
+  // Old project pages and the old work grid now live in the gallery
+  if (clean === 'gallery' || clean.startsWith('work/')) return { path: '/', scrollTo: 'gallery' };
+  if (clean === 'about') return { path: '/about' };
+  if (clean === 'contact') return { path: '/contact' };
   return { path: '/' };
 }
 
@@ -85,10 +74,6 @@ export default function App() {
     let title = `${SITE_NAME} | ${TAGLINE.replace(/\.$/, '')}`;
     if (route.path === '/about') title = `About | ${SITE_NAME}`;
     else if (route.path === '/contact') title = `Contact | ${SITE_NAME}`;
-    else if (route.slug) {
-      const project = PROJECTS.find((p) => p.slug === route.slug);
-      title = project ? `${project.name} | ${SITE_NAME}` : `Project | ${SITE_NAME}`;
-    }
     document.title = title;
   }, [route]);
 
@@ -96,60 +81,44 @@ export default function App() {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   }, []);
 
-  // Sync hash changes
+  // Sync hash changes (and send old /work/* links to the gallery)
   useEffect(() => {
     const handleHashChange = () => {
-      const parsed = parseHash(window.location.hash);
-      setRoute(parsed);
-      if (parsed.isWorkScroll) {
-        setTimeout(() => {
-          const el = document.getElementById('work');
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth' });
-          }
-        }, 100);
-      } else {
-        window.scrollTo({ top: 0, behavior: 'instant' });
+      if (window.location.hash.replace(/^#\/?/, '').startsWith('work/')) {
+        window.history.replaceState(null, '', '#gallery');
       }
+      setRoute(parseHash(window.location.hash));
     };
-
+    handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Handle programmatic navigation
-  const navigate = useCallback((path: string, scrollToWork: boolean = false) => {
-    if (scrollToWork) {
-      if (route.path === '/') {
-        const el = document.getElementById('work');
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }
-        window.history.pushState(null, '', '#work');
-      } else {
-        window.location.hash = '#work';
+  // Scroll to the requested section, or to the top on a plain page change
+  useEffect(() => {
+    if (!route.scrollTo) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      return;
+    }
+    const id = route.scrollTo;
+    const t = setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 150);
+    return () => clearTimeout(t);
+  }, [route]);
+
+  // Programmatic navigation: a path, or a home section to scroll to
+  const navigate = useCallback((path: string, section?: 'work' | 'gallery') => {
+    if (section) {
+      window.location.hash = `#${section}`;
+      // Same hash again (already there): hashchange will not fire, so scroll directly
+      if (route.path === '/' && route.scrollTo === (section === 'work' ? 'what-we-build' : 'gallery')) {
+        document
+          .getElementById(section === 'work' ? 'what-we-build' : 'gallery')
+          ?.scrollIntoView({ behavior: 'smooth' });
       }
       return;
     }
-
-    if (path === '/') {
-      window.location.hash = '#/';
-    } else {
-      window.location.hash = `#${path.startsWith('/') ? path : '/' + path}`;
-    }
-  }, [route.path]);
-
-  // Initial scroll to #work if page was opened with #work
-  useEffect(() => {
-    if (route.isWorkScroll) {
-      setTimeout(() => {
-        const el = document.getElementById('work');
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 150);
-    }
-  }, [route.isWorkScroll]);
+    window.location.hash = path === '/' ? '#/' : `#${path.startsWith('/') ? path : '/' + path}`;
+  }, [route]);
 
   return (
     <div className="app-root min-h-screen flex flex-col bg-[var(--bg-color)] text-[var(--text-color)] transition-colors duration-300">
@@ -168,7 +137,6 @@ export default function App() {
         {route.path === '/' && <Home onNavigate={navigate} introDone={!showIntro} />}
         {route.path === '/about' && <About />}
         {route.path === '/contact' && <Contact />}
-        {route.slug && <ProjectDetail slug={route.slug} onNavigate={navigate} />}
       </div>
 
       {/* Footer on every page */}

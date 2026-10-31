@@ -146,11 +146,11 @@ export const Contact: React.FC = () => {
             </div>
           </div>
 
-          {/* Location & Studio Row */}
+          {/* Office Row */}
           <div className="py-8 md:py-12 group flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="w-full md:w-1/4">
               <span className="text-xs uppercase tracking-[0.08em] text-[var(--muted-color)] font-medium">
-                Headquarters & Workshop
+                Office
               </span>
             </div>
             <div className="flex-1 flex items-center justify-between gap-4">
@@ -166,7 +166,35 @@ export const Contact: React.FC = () => {
                 href={CONTACT_INFO.googleMapsUrl}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Open location in Google Maps"
+                aria-label="Open office in Google Maps"
+                className="p-2 text-[var(--muted-color)] hover:text-[var(--accent-color)] transition-colors shrink-0"
+              >
+                <ArrowUpRight size={26} />
+              </a>
+            </div>
+          </div>
+
+          {/* Workshop Row */}
+          <div className="py-8 md:py-12 group flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="w-full md:w-1/4">
+              <span className="text-xs uppercase tracking-[0.08em] text-[var(--muted-color)] font-medium">
+                Workshop
+              </span>
+            </div>
+            <div className="flex-1 flex items-center justify-between gap-4">
+              <a
+                href={CONTACT_INFO.workshopMapsUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-lg sm:text-2xl md:text-3xl font-medium text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors"
+              >
+                {CONTACT_INFO.workshopAddress}
+              </a>
+              <a
+                href={CONTACT_INFO.workshopMapsUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open workshop in Google Maps"
                 className="p-2 text-[var(--muted-color)] hover:text-[var(--accent-color)] transition-colors shrink-0"
               >
                 <ArrowUpRight size={26} />
@@ -175,36 +203,62 @@ export const Contact: React.FC = () => {
           </div>
         </div>
 
-        {/* Google Maps Embed & Location Context */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-4">
-            <h2 className="font-heading text-2xl md:text-3xl font-bold tracking-[0em] text-[var(--text-color)] mb-3">
-              Delhi Headquarters
-            </h2>
-            <p className="text-sm md:text-base text-[var(--muted-color)] leading-relaxed mb-6 font-normal">
-              Our central office and production workshop are based in Azadpur, Delhi, managing
-              turnkey rollouts across North India and coordinating international projects in the
-              Middle East.
-            </p>
-            <a
-              href={CONTACT_INFO.googleMapsUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.08em] font-semibold text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors border-b border-[var(--text-color)] pb-1 hover:border-[var(--accent-color)]"
-            >
-              <span>Open in Google Maps</span>
-              <ArrowUpRight size={14} />
-            </a>
+        {/* Google Maps: office and workshop */}
+        <div className="space-y-16 md:space-y-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="lg:col-span-4">
+              <h2 className="section-heading mb-3">Office</h2>
+              <p className="text-sm md:text-base text-[var(--muted-color)] leading-relaxed mb-6 font-normal">
+                Our central office in Azadpur, Delhi, managing turnkey rollouts across North India and
+                coordinating international projects in the Middle East.
+              </p>
+              <a
+                href={CONTACT_INFO.googleMapsUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.08em] font-semibold text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors border-b border-[var(--text-color)] pb-1 hover:border-[var(--accent-color)]"
+              >
+                <span>Open office in Google Maps</span>
+                <ArrowUpRight size={14} />
+              </a>
+            </div>
+            <div className="lg:col-span-8 aspect-[16/9] w-full bg-[var(--surface-color)] border border-[var(--border-color)] overflow-hidden">
+              <iframe
+                title="Adhvik Projects office map"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13997.771900130932!2d77.1687258!3d28.7062402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d023b499ee8db%3A0xb30e38634c44f57c!2sAzadpur%2C%20Delhi%2C%20110033!5e0!3m2!1sen!2sin!4v1714000000000!5m2!1sen!2sin"
+                className="w-full h-full border-0 grayscale hover:grayscale-0 transition-all duration-500"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
           </div>
 
-          <div className="lg:col-span-8 aspect-[16/9] w-full bg-[var(--surface-color)] border border-[var(--border-color)] overflow-hidden">
-            <iframe
-              title="Adhvik Projects Location Map"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13997.771900130932!2d77.1687258!3d28.7062402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d023b499ee8db%3A0xb30e38634c44f57c!2sAzadpur%2C%20Delhi%2C%20110033!5e0!3m2!1sen!2sin!4v1714000000000!5m2!1sen!2sin"
-              className="w-full h-full border-0 grayscale hover:grayscale-0 transition-all duration-500"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="lg:col-span-4">
+              <h2 className="section-heading mb-3">Workshop</h2>
+              <p className="text-sm md:text-base text-[var(--muted-color)] leading-relaxed mb-6 font-normal">
+                Our in-house production workshop in Mundka, Delhi, where furniture, fixtures and wall
+                modules are made.
+              </p>
+              <a
+                href={CONTACT_INFO.workshopMapsUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.08em] font-semibold text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors border-b border-[var(--text-color)] pb-1 hover:border-[var(--accent-color)]"
+              >
+                <span>Open workshop in Google Maps</span>
+                <ArrowUpRight size={14} />
+              </a>
+            </div>
+            <div className="lg:col-span-8 aspect-[16/9] w-full bg-[var(--surface-color)] border border-[var(--border-color)] overflow-hidden">
+              <iframe
+                title="Adhvik Projects workshop map"
+                src={CONTACT_INFO.workshopMapsEmbedUrl}
+                className="w-full h-full border-0 grayscale hover:grayscale-0 transition-all duration-500"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
           </div>
         </div>
       </div>

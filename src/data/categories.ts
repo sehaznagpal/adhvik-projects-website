@@ -44,6 +44,3 @@ export const CATEGORIES: Category[] = [
     line: "Stalls and pavilions designed, fabricated and installed.",
   },
 ];
-
-export const categoryName = (slug: string): string =>
-  CATEGORIES.find((c) => c.slug === slug)?.name ?? slug;

@@ -7,14 +7,24 @@ interface NavigationProps {
   currentPath: string;
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
-  onNavigate: (path: string, scrollToWork?: boolean) => void;
+  onNavigate: (path: string, section?: 'work' | 'gallery') => void;
 }
 
-const PREVIEW_IMAGES: Record<string, { src: string; title: string }> = {
-  work: { src: '/images/wardrobe-gwalior-02.jpg', title: 'Wardrobe, Gwalior' },
+type LinkKey = 'about' | 'work' | 'gallery' | 'contact';
+
+const PREVIEW_IMAGES: Record<LinkKey, { src: string; title: string }> = {
   about: { src: '/images/workshop-06.jpg', title: 'Furniture Workshop' },
+  work: { src: '/images/wardrobe-gwalior-02.jpg', title: 'Wardrobe, Gwalior' },
+  gallery: { src: '/images/kuber-01.jpg', title: 'Kuber' },
   contact: { src: '/images/madame-jeddah-02.jpg', title: 'Madame, Jeddah' },
 };
+
+const MENU_LINKS: { key: LinkKey; label: string; path: string; section?: 'work' | 'gallery' }[] = [
+  { key: 'about', label: 'About', path: '/about' },
+  { key: 'work', label: 'Work', path: '/', section: 'work' },
+  { key: 'gallery', label: 'Gallery', path: '/', section: 'gallery' },
+  { key: 'contact', label: 'Contact', path: '/contact' },
+];
 
 export const Navigation: React.FC<NavigationProps> = ({
   currentPath,
@@ -24,7 +34,7 @@ export const Navigation: React.FC<NavigationProps> = ({
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [hoveredLink, setHoveredLink] = useState<'work' | 'about' | 'contact'>('work');
+  const [hoveredLink, setHoveredLink] = useState<LinkKey>('about');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,9 +62,9 @@ export const Navigation: React.FC<NavigationProps> = ({
     }
   }, [isMenuOpen]);
 
-  const handleLinkClick = (path: string, scrollToWork: boolean = false) => {
+  const handleLinkClick = (path: string, section?: 'work' | 'gallery') => {
     setIsMenuOpen(false);
-    onNavigate(path, scrollToWork);
+    onNavigate(path, section);
   };
 
   return (
@@ -239,61 +249,36 @@ export const Navigation: React.FC<NavigationProps> = ({
         <div className="max-w-[1440px] w-full mx-auto px-5 md:px-10 lg:px-14 py-8 md:py-12 flex-1 flex items-center">
           <div className="grid grid-cols-1 lg:grid-cols-12 w-full gap-8 lg:gap-16 items-center">
             {/* Left Column: Navigation with Staggered Entrance */}
-            <nav className="lg:col-span-7 flex flex-col gap-6 md:gap-10">
-              <div
-                className={`transition-all duration-500 delay-75 ${
-                  isMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                }`}
-                onMouseEnter={() => setHoveredLink('work')}
-              >
-                <button
-                  onClick={() => handleLinkClick('/', true)}
-                  className="group text-left font-heading text-5xl sm:text-7xl md:text-8xl font-bold tracking-[-0.02em] text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors inline-flex items-start gap-2 focus:outline-none cursor-pointer"
-                >
-                  <span>Work</span>
-                  <span className="text-[14px] tracking-[0.04em] font-normal leading-normal text-[var(--muted-color)] group-hover:text-[var(--accent-color)] transition-colors pt-2">
-                    (07)
-                  </span>
-                </button>
-              </div>
-
-              <div
-                className={`transition-all duration-500 delay-150 ${
-                  isMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                }`}
-                onMouseEnter={() => setHoveredLink('about')}
-              >
-                <button
-                  onClick={() => handleLinkClick('/about')}
-                  className={`text-left font-heading text-5xl sm:text-7xl md:text-8xl font-bold tracking-[-0.02em] hover:text-[var(--accent-color)] transition-colors focus:outline-none cursor-pointer ${
-                    currentPath === '/about' ? 'text-[var(--accent-color)]' : 'text-[var(--text-color)]'
-                  }`}
-                >
-                  About
-                </button>
-              </div>
-
-              <div
-                className={`transition-all duration-500 delay-225 ${
-                  isMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                }`}
-                onMouseEnter={() => setHoveredLink('contact')}
-              >
-                <button
-                  onClick={() => handleLinkClick('/contact')}
-                  className={`text-left font-heading text-5xl sm:text-7xl md:text-8xl font-bold tracking-[-0.02em] hover:text-[var(--accent-color)] transition-colors focus:outline-none cursor-pointer ${
-                    currentPath === '/contact' ? 'text-[var(--accent-color)]' : 'text-[var(--text-color)]'
-                  }`}
-                >
-                  Contact
-                </button>
-              </div>
+            <nav className="lg:col-span-7 flex flex-col gap-4 md:gap-6">
+              {MENU_LINKS.map((link, i) => {
+                const active = !link.section && currentPath === link.path;
+                return (
+                  <div
+                    key={link.key}
+                    className={`transition-all duration-500 ${
+                      isMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                    }`}
+                    style={{ transitionDelay: `${75 + i * 75}ms` }}
+                    onMouseEnter={() => setHoveredLink(link.key)}
+                    onFocus={() => setHoveredLink(link.key)}
+                  >
+                    <button
+                      onClick={() => handleLinkClick(link.path, link.section)}
+                      className={`text-left font-heading text-5xl sm:text-7xl md:text-8xl font-bold tracking-[-0.02em] hover:text-[var(--accent-color)] transition-colors focus:outline-none focus-visible:text-[var(--accent-color)] cursor-pointer ${
+                        active ? 'text-[var(--accent-color)]' : 'text-[var(--text-color)]'
+                      }`}
+                    >
+                      {link.label}
+                    </button>
+                  </div>
+                );
+              })}
             </nav>
 
             {/* Right Column: Desktop Hover Preview Photo */}
             <div className="hidden lg:block lg:col-span-5">
               <div className="relative aspect-[4/3] w-full max-w-md ml-auto bg-[var(--surface-color)] overflow-hidden">
-                {(['work', 'about', 'contact'] as const).map((key) => {
+                {(['about', 'work', 'gallery', 'contact'] as const).map((key) => {
                   const preview = PREVIEW_IMAGES[key];
                   const isCurrent = hoveredLink === key;
                   return (
@@ -353,6 +338,25 @@ export const Navigation: React.FC<NavigationProps> = ({
             </span>
           </div>
         </div>
+
+        <div className="max-w-[1440px] w-full mx-auto px-5 md:px-10 lg:px-14 pb-8 flex flex-col gap-1 sm:flex-row sm:gap-8 text-xs md:text-sm text-[var(--muted-color)]">
+                      <a
+              href={CONTACT_INFO.googleMapsUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-[var(--text-color)] transition-colors"
+            >
+              Office: {CONTACT_INFO.address}
+            </a>
+            <a
+              href={CONTACT_INFO.workshopMapsUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-[var(--text-color)] transition-colors"
+            >
+              Workshop: {CONTACT_INFO.workshopAddress}
+            </a>
+                  </div>
       </div>
     </>
   );

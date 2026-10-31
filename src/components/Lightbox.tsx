@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export interface LightboxImage {
@@ -22,6 +22,8 @@ export const Lightbox: React.FC<LightboxProps> = ({
   onClose,
   onNavigate,
 }) => {
+  const touchX = useRef<number | null>(null);
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (!isOpen) return;
@@ -60,6 +62,16 @@ export const Lightbox: React.FC<LightboxProps> = ({
       aria-label="Image gallery lightbox"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm text-neutral-100"
       onClick={onClose}
+      onTouchStart={(e) => {
+        touchX.current = e.touches[0].clientX;
+      }}
+      onTouchEnd={(e) => {
+        if (touchX.current === null || images.length < 2) return;
+        const dx = e.changedTouches[0].clientX - touchX.current;
+        touchX.current = null;
+        if (Math.abs(dx) < 50) return;
+        onNavigate(dx < 0 ? (currentIndex + 1) % images.length : (currentIndex - 1 + images.length) % images.length);
+      }}
     >
       {/* Top Bar with Counter and Close Button */}
       <div

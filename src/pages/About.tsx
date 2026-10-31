@@ -145,10 +145,8 @@ export const About: React.FC = () => {
         {/* SERVICES SECTION */}
         <section className="py-20 md:py-28 border-b border-[var(--border-color)]">
           <div className="mb-10 md:mb-14">
-            <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent-color)] block mb-2">
-              End-to-End Capabilities
-            </span>
-            <h2 className="font-heading text-3xl sm:text-5xl font-bold tracking-[0em] md:tracking-[-0.02em] text-[var(--text-color)]">
+            <span className="eyebrow">End-to-End Capabilities</span>
+            <h2 className="section-heading">
               Services
             </h2>
           </div>
@@ -173,10 +171,8 @@ export const About: React.FC = () => {
         {/* THE TEAM SECTION */}
         <section className="py-16 md:py-24 border-b border-[var(--border-color)]">
           <div className="mb-8">
-            <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent-color)] block mb-2">
-              Cross-Functional Expertise
-            </span>
-            <h2 className="font-heading text-2xl sm:text-4xl font-bold tracking-[0em] text-[var(--text-color)]">
+            <span className="eyebrow">Cross-Functional Expertise</span>
+            <h2 className="section-heading">
               The Team
             </h2>
           </div>
@@ -196,10 +192,8 @@ export const About: React.FC = () => {
         {/* OUR WORKSHOP SECTION */}
         <section className="pt-20 md:pt-28">
           <div className="mb-10 md:mb-14">
-            <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent-color)] block mb-2">
-              Fabrication Facility
-            </span>
-            <h2 className="font-heading text-3xl sm:text-5xl font-bold tracking-[0em] md:tracking-[-0.02em] text-[var(--text-color)] mb-3">
+            <span className="eyebrow">Fabrication Facility</span>
+            <h2 className="section-heading">
               Our Workshop
             </h2>
             <p className="text-sm md:text-base text-[var(--muted-color)]">

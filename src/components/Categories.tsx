@@ -1,12 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CATEGORIES } from '../data/categories';
-import { PROJECTS } from '../data/projects';
 
-interface CategoriesProps {
-  onSelect: (slug: string) => void;
-}
-
-export const Categories: React.FC<CategoriesProps> = ({ onSelect }) => {
+export const Categories: React.FC = () => {
   const [canHover, setCanHover] = useState(false);
 
   useEffect(() => {
@@ -29,10 +24,8 @@ export const Categories: React.FC<CategoriesProps> = ({ onSelect }) => {
       className="pt-20 md:pt-32 pb-8 md:pb-16 max-w-[1440px] mx-auto px-5 md:px-10 lg:px-14 scroll-mt-20"
     >
       <div className="mb-10 md:mb-16">
-        <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent-color)] block mb-3">
-          What we build
-        </span>
-        <h2 className="font-heading text-[clamp(2rem,6vw,4.5rem)] font-bold tracking-[-0.02em] text-[var(--text-color)] [overflow-wrap:break-word]">
+        <span className="eyebrow">What we build</span>
+        <h2 className="section-heading">
           Spaces we deliver,{' '}
           <span className="font-serif-italic font-light whitespace-nowrap">end to end.</span>
         </h2>
@@ -40,25 +33,13 @@ export const Categories: React.FC<CategoriesProps> = ({ onSelect }) => {
 
       <ul className="border-t border-[var(--border-color)] [overflow-x:clip]">
         {CATEGORIES.map((cat, idx) => {
-          const linked = PROJECTS.some((p) => p.category === cat.slug);
-          const Row: React.ElementType = linked ? 'a' : 'div';
-          const rowProps = linked
-            ? {
-                href: `?category=${cat.slug}#work`,
-                onClick: (e: React.MouseEvent) => {
-                  e.preventDefault();
-                  onSelect(cat.slug);
-                },
-              }
-            : {};
           return (
           <li
             key={cat.slug}
-            data-category={cat.slug}
             onMouseMove={canHover && cat.image ? handleMove : undefined}
             className="category-row group relative border-b border-[var(--border-color)] py-6 md:py-8"
           >
-            <Row {...rowProps} className="block focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent-color)]">
+            <div>
             <div className="flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between md:gap-10">
               <div className="flex items-baseline gap-4 md:gap-6 min-w-0">
                 <span className="text-xs md:text-sm tabular-nums text-[var(--muted-color)] transition-colors duration-300 group-hover:text-[var(--accent-color)] shrink-0">
@@ -72,7 +53,7 @@ export const Categories: React.FC<CategoriesProps> = ({ onSelect }) => {
                 {cat.line}
               </p>
             </div>
-            </Row>
+            </div>
 
             {canHover && cat.image && (
               <div
