@@ -121,7 +121,7 @@ export const Loader: React.FC<LoaderProps> = ({ imageSrcs, onDone }) => {
       aria-hidden="true"
       className={`loader ${exiting ? (reduced ? 'loader-fade' : 'loader-exit') : ''}`}
     >
-      <Wordmark animated={!reduced} className="loader-wordmark" />
+      <Wordmark animated={!reduced} showLine className="loader-wordmark" />
       <div className="loader-percent">{percent}%</div>
       <button
         type="button"

@@ -29,21 +29,51 @@ function tokenize(): Token[] {
 export const AboutIntro: React.FC = () => {
   const tokens = useMemo(tokenize, []);
   const textRef = useRef<HTMLParagraphElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const el = textRef.current;
     if (!el) return;
     const units = Array.from(el.querySelectorAll<HTMLElement>('[data-unit]'));
+    const root = document.documentElement;
+    const section = sectionRef.current;
     const setAll = (t: number) => units.forEach((u) => u.style.setProperty('--t', String(t)));
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    // Page background shift: 0 outside the section, 1 while reading it, eased over the
+    // first and last 20% of the section's travel through the viewport
+    const updateShift = () => {
+      if (!section) return;
+      const vh = window.innerHeight;
+      const r = section.getBoundingClientRect();
+      const q = (vh - r.top) / (vh + r.height);
+      let shift: number;
+      if (reduced) {
+        shift = r.top < vh * 0.5 && r.bottom > vh * 0.5 ? 1 : 0;
+      } else {
+        shift = Math.min(Math.max(Math.min(q / 0.2, (1 - q) / 0.2), 0), 1);
+      }
+      root.style.setProperty('--shift', shift.toFixed(3));
+    };
+
+    if (reduced) {
+      root.classList.add('shift-fade');
       setAll(1);
-      return;
+      updateShift();
+      window.addEventListener('scroll', updateShift, { passive: true });
+      window.addEventListener('resize', updateShift);
+      return () => {
+        window.removeEventListener('scroll', updateShift);
+        window.removeEventListener('resize', updateShift);
+        root.classList.remove('shift-fade');
+        root.style.removeProperty('--shift');
+      };
     }
 
     let raf = 0;
     const update = () => {
       raf = 0;
+      updateShift();
       const vh = window.innerHeight;
       const rect = el.getBoundingClientRect();
       const startY = vh * 0.85;
@@ -65,15 +95,17 @@ export const AboutIntro: React.FC = () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
       if (raf) cancelAnimationFrame(raf);
+      root.style.removeProperty('--shift');
     };
   }, []);
 
   return (
     <section
+      ref={sectionRef}
       id="about-intro"
       className="py-24 md:py-36 max-w-[1440px] mx-auto px-5 md:px-10 lg:px-14 scroll-mt-20"
     >
-      <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent-color)] block mb-6 md:mb-8">
+      <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted-color)] block mb-6 md:mb-8">
         About us
       </span>
 
@@ -105,7 +137,7 @@ export const AboutIntro: React.FC = () => {
 
       <a
         href="#/about"
-        className="group mt-10 md:mt-14 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.08em] text-[var(--text-color)] hover:text-[var(--accent-color)] transition-colors"
+        className="group mt-10 md:mt-14 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted-color)] hover:text-[var(--text-color)] transition-colors"
       >
         <span>More about us</span>
         <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">

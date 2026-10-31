@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CATEGORIES } from '../data/categories';
+import { PROJECTS } from '../data/projects';
 
-export const Categories: React.FC = () => {
+interface CategoriesProps {
+  onSelect: (slug: string) => void;
+}
+
+export const Categories: React.FC<CategoriesProps> = ({ onSelect }) => {
   const [canHover, setCanHover] = useState(false);
 
   useEffect(() => {
@@ -34,13 +39,26 @@ export const Categories: React.FC = () => {
       </div>
 
       <ul className="border-t border-[var(--border-color)] [overflow-x:clip]">
-        {CATEGORIES.map((cat, idx) => (
+        {CATEGORIES.map((cat, idx) => {
+          const linked = PROJECTS.some((p) => p.category === cat.slug);
+          const Row: React.ElementType = linked ? 'a' : 'div';
+          const rowProps = linked
+            ? {
+                href: `?category=${cat.slug}#work`,
+                onClick: (e: React.MouseEvent) => {
+                  e.preventDefault();
+                  onSelect(cat.slug);
+                },
+              }
+            : {};
+          return (
           <li
             key={cat.slug}
             data-category={cat.slug}
             onMouseMove={canHover && cat.image ? handleMove : undefined}
             className="category-row group relative border-b border-[var(--border-color)] py-6 md:py-8"
           >
+            <Row {...rowProps} className="block focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent-color)]">
             <div className="flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between md:gap-10">
               <div className="flex items-baseline gap-4 md:gap-6 min-w-0">
                 <span className="text-xs md:text-sm tabular-nums text-[var(--muted-color)] transition-colors duration-300 group-hover:text-[var(--accent-color)] shrink-0">
@@ -54,6 +72,7 @@ export const Categories: React.FC = () => {
                 {cat.line}
               </p>
             </div>
+            </Row>
 
             {canHover && cat.image && (
               <div
@@ -66,7 +85,8 @@ export const Categories: React.FC = () => {
               </div>
             )}
           </li>
-        ))}
+          );
+        })}
       </ul>
     </section>
   );

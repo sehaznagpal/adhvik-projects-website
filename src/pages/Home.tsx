@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { CATEGORIES } from '../data/categories';
 import { Ticker } from '../components/Ticker';
 import { Categories } from '../components/Categories';
 import { AboutIntro } from '../components/AboutIntro';
 import { Wordmark } from '../components/Wordmark';
-import { PROJECTS, HERO_FEATURED_PHOTOS } from '../data/projects';
+import { WorkGrid } from '../components/WorkGrid';
+import { HERO_FEATURED_PHOTOS } from '../data/projects';
 import { TAGLINE, DESCRIPTOR } from '../data/brand';
 
 export const HERO_IMAGES = HERO_FEATURED_PHOTOS.map(({ src, alt }) => ({ src, alt }));
@@ -17,6 +19,27 @@ export const Home: React.FC<HomeProps> = ({ onNavigate, introDone = true }) => {
   const [heroAnimated, setHeroAnimated] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
+  const [category, setCategory] = useState(() => {
+    const c = new URLSearchParams(window.location.search).get('category');
+    return c && CATEGORIES.some((x) => x.slug === c) ? c : 'all';
+  });
+
+  // Keep ?category=slug in the URL so a filtered view is shareable
+  const handleCategoryChange = useCallback((slug: string) => {
+    setCategory(slug);
+    const url = new URL(window.location.href);
+    if (slug === 'all') url.searchParams.delete('category');
+    else url.searchParams.set('category', slug);
+    window.history.replaceState(null, '', url.toString());
+  }, []);
+
+  const handleSelectCategory = useCallback(
+    (slug: string) => {
+      handleCategoryChange(slug);
+      document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
+    },
+    [handleCategoryChange]
+  );
   const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
   const [isHoveringImage, setIsHoveringImage] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -172,98 +195,9 @@ export const Home: React.FC<HomeProps> = ({ onNavigate, introDone = true }) => {
 
       <AboutIntro />
 
-      <Categories />
+      <Categories onSelect={handleSelectCategory} />
 
-      {/* WORK SECTION (dvdrod style) */}
-      <section id="work" className="pt-20 md:pt-32 pb-24 md:pb-36 max-w-[1440px] mx-auto px-5 md:px-10 lg:px-14 scroll-mt-20">
-        {/* Section Header: stacked below 1024px, side by side on 1024px+ */}
-        <div className="mb-14 md:mb-20 pb-6 border-b border-[var(--border-color)] flex flex-col items-start gap-3 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--accent-color)] block mb-2">
-              Selected Projects
-            </span>
-            <h2 className="font-heading text-4xl sm:text-6xl md:text-7xl font-bold tracking-[-0.02em] text-[var(--text-color)]">
-              Work
-            </h2>
-          </div>
-          <div className="text-xs md:text-sm text-[var(--muted-color)] tracking-[0.02em]">
-            07 Selected Commissions
-          </div>
-        </div>
-
-        {/* Numbered Vertical Project List */}
-        <div className="divide-y divide-[var(--border-color)]">
-          {PROJECTS.map((project) => (
-            <article
-              key={project.slug}
-              className="group py-12 md:py-20 first:pt-0"
-            >
-              <button
-                onClick={() => onNavigate(`/work/${project.slug}`)}
-                className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-color)]"
-                aria-label={`View ${project.name} in ${project.location}`}
-              >
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-start">
-                  {/* Left Column: Number + Metadata */}
-                  <div className="lg:col-span-5 flex flex-col justify-between">
-                    <div>
-                      {/* Number */}
-                      <span className="text-xs md:text-sm font-mono tracking-[0.08em] text-[var(--muted-color)] uppercase block mb-3 md:mb-4">
-                        {project.number}
-                      </span>
-
-                      {/* Project Name (tracking-[0em] for between 20px and 48px, [-0.04em] for >=48px) */}
-                      <h3 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold tracking-[0em] md:tracking-[-0.02em] text-[var(--text-color)] group-hover:text-[var(--accent-color)] transition-colors mb-4 md:mb-6">
-                        {project.name}
-                      </h3>
-
-                      {/* Clean Unboxed Metadata line */}
-                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs md:text-sm text-[var(--muted-color)] font-normal mb-6">
-                        <span>{project.location}</span>
-                        <span aria-hidden="true">·</span>
-                        <span>{project.area}</span>
-                        <span aria-hidden="true">·</span>
-                        <span className="text-[var(--text-color)] font-medium">{project.type}</span>
-                      </div>
-                    </div>
-
-                    {/* View Project prompt (desktop subtle indicator) */}
-                    <div className="hidden lg:flex items-center gap-2 text-xs font-medium uppercase tracking-[0.08em] text-[var(--text-color)] group-hover:text-[var(--accent-color)] transition-colors pt-8">
-                      <span>Explore Project</span>
-                      <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-                    </div>
-                  </div>
-
-                  {/* Right Column: Large Cover Image with Cursor Detection */}
-                  <div
-                    className="lg:col-span-7"
-                    onMouseEnter={() => setIsHoveringImage(true)}
-                    onMouseLeave={() => setIsHoveringImage(false)}
-                  >
-                    <div className="aspect-[16/10] sm:aspect-[16/9] w-full bg-[var(--surface-color)] overflow-hidden relative">
-                      <img
-                        src={project.coverImage}
-                        alt={project.coverAlt}
-                        loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
-                      />
-                    </div>
-                    {/* Mobile explore label */}
-                    <div className="flex lg:hidden items-center justify-between text-xs font-medium text-[var(--text-color)] pt-3">
-                      <span className="group-hover:text-[var(--accent-color)] transition-colors">
-                        View gallery ({project.gallery.length + 1} photos)
-                      </span>
-                      <span className="group-hover:text-[var(--accent-color)] transition-transform group-hover:translate-x-1">
-                        →
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </button>
-            </article>
-          ))}
-        </div>
-      </section>
+      <WorkGrid category={category} onCategoryChange={handleCategoryChange} onHoverImage={setIsHoveringImage} />
     </main>
   );
 };

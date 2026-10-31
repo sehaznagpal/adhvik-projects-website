@@ -1,220 +1,180 @@
+/**
+ * HOW TO ADD PHOTOS TO A PROJECT
+ *
+ * 1. Put the image files in public/images/ (for example public/images/libas-delhi-01.jpg).
+ * 2. List the filenames (no folder) in the project's `images` array. The first one is the cover.
+ * 3. Optionally add `imageAlts` with one description per image, in the same order.
+ *
+ * A project with a non-empty `images` array automatically becomes a clickable card in the Work grid
+ * with its own detail page at /work/:slug. A project with `images: []` shows as a text tile and is not a link.
+ * Categories come from src/data/categories.ts (use a category slug).
+ */
 export interface Project {
-  number: string;
   slug: string;
   name: string;
   location: string;
-  area: string;
-  type: string;
   category: string;
-  scope?: string;
-  coverImage: string;
-  coverAlt: string;
-  gallery: {
-    src: string;
-    alt: string;
-  }[];
+  images: string[];
+  imageAlts?: string[];
 }
 
 export const PROJECTS: Project[] = [
   {
-    number: "01",
     slug: "wardrobe-gwalior",
     name: "Wardrobe",
     location: "Lashkar, Gwalior, MP",
-    area: "19,000 sq ft",
-    type: "Retail",
     category: "retail-stores",
-    scope: "Design + turnkey execution",
-    coverImage: "/images/wardrobe-gwalior-01.jpg",
-    coverAlt: "Wardrobe, Gwalior, store façade and street entrance in Lashkar",
-    gallery: [
-      {
-        src: "/images/wardrobe-gwalior-02.jpg",
-        alt: "Wardrobe, reception and bespoke monolithic billing counter with geometric textured ceiling",
-      },
-      {
-        src: "/images/wardrobe-gwalior-03.jpg",
-        alt: "Wardrobe, formal menswear showcase with ambient coffered ceiling lighting",
-      },
-      {
-        src: "/images/wardrobe-gwalior-04.jpg",
-        alt: "Wardrobe, luxury lounge seating area with custom display racks and brass highlights",
-      },
-      {
-        src: "/images/wardrobe-gwalior-05.jpg",
-        alt: "Wardrobe, custom perimeter shelving and bespoke wardrobe architectural millwork",
-      },
+    images: [
+      "wardrobe-gwalior-01.jpg",
+      "wardrobe-gwalior-02.jpg",
+      "wardrobe-gwalior-03.jpg",
+      "wardrobe-gwalior-04.jpg",
+      "wardrobe-gwalior-05.jpg",
+    ],
+    imageAlts: [
+      "Wardrobe, Gwalior, store façade and street entrance in Lashkar",
+      "Wardrobe, reception and bespoke monolithic billing counter with geometric textured ceiling",
+      "Wardrobe, formal menswear showcase with ambient coffered ceiling lighting",
+      "Wardrobe, luxury lounge seating area with custom display racks and brass highlights",
+      "Wardrobe, custom perimeter shelving and bespoke wardrobe architectural millwork",
     ],
   },
   {
-    number: "02",
     slug: "stanmax-dehradun",
     name: "Stanmax",
     location: "Rajpur Road, Dehradun",
-    area: "36,000 sq ft",
-    type: "Retail",
     category: "retail-stores",
-    scope: "Design + turnkey execution",
-    coverImage: "/images/stanmax-dehradun-05.jpg",
-    coverAlt: "Stanmax, Dehradun, flagship retail store architectural exterior on Rajpur Road",
-    gallery: [
-      {
-        src: "/images/stanmax-dehradun-01.jpg",
-        alt: "Stanmax, evening multi-floor glazed storefront with illuminated mannequins",
-      },
-      {
-        src: "/images/stanmax-dehradun-02.jpg",
-        alt: "Stanmax, daytime street perspective highlighting the curved glass rotunda",
-      },
-      {
-        src: "/images/stanmax-dehradun-03.jpg",
-        alt: "Stanmax, multi-tier retail floor with custom timber fixtures and display tables",
-      },
-      {
-        src: "/images/stanmax-dehradun-04.jpg",
-        alt: "Stanmax, circular central mannequin stage with geometric acoustic ceiling baffles",
-      },
+    images: [
+      "stanmax-dehradun-05.jpg",
+      "stanmax-dehradun-01.jpg",
+      "stanmax-dehradun-02.jpg",
+      "stanmax-dehradun-03.jpg",
+      "stanmax-dehradun-04.jpg",
+    ],
+    imageAlts: [
+      "Stanmax, Dehradun, flagship retail store architectural exterior on Rajpur Road",
+      "Stanmax, evening multi-floor glazed storefront with illuminated mannequins",
+      "Stanmax, daytime street perspective highlighting the curved glass rotunda",
+      "Stanmax, multi-tier retail floor with custom timber fixtures and display tables",
+      "Stanmax, circular central mannequin stage with geometric acoustic ceiling baffles",
     ],
   },
   {
-    number: "03",
     slug: "madame-jeddah",
     name: "Madame",
     location: "Al Andalus Mall, Jeddah, KSA",
-    area: "1,950 sq ft",
-    type: "Retail · International",
     category: "retail-stores",
-    scope: "Design + turnkey execution",
-    coverImage: "/images/madame-jeddah-02.jpg",
-    coverAlt: "Madame, Jeddah, international retail showroom glass facade at Al Andalus Mall",
-    gallery: [
-      {
-        src: "/images/madame-jeddah-01.jpg",
-        alt: "Madame, boutique entrance featuring bilingual Arabic and English brand signage",
-      },
-      {
-        src: "/images/madame-jeddah-03.jpg",
-        alt: "Madame, interior merchandise displays with hanging pendant luminaires and polished flooring",
-      },
+    images: [
+      "madame-jeddah-02.jpg",
+      "madame-jeddah-01.jpg",
+      "madame-jeddah-03.jpg",
+    ],
+    imageAlts: [
+      "Madame, Jeddah, international retail showroom glass facade at Al Andalus Mall",
+      "Madame, boutique entrance featuring bilingual Arabic and English brand signage",
+      "Madame, interior merchandise displays with hanging pendant luminaires and polished flooring",
     ],
   },
   {
-    number: "04",
     slug: "global-republic-mohali",
     name: "Global Republic",
     location: "Bestech, Mohali",
-    area: "2,550 sq ft",
-    type: "Retail",
     category: "retail-stores",
-    scope: "Design + turnkey execution",
-    coverImage: "/images/global-republic-mohali-01.jpg",
-    coverAlt: "Global Republic, Mohali, storefront showcase with glass bays at Bestech",
-    gallery: [
-      {
-        src: "/images/global-republic-mohali-02.jpg",
-        alt: "Global Republic, retail floor with bespoke natural wood wall bays and center islands",
-      },
-      {
-        src: "/images/global-republic-mohali-03.jpg",
-        alt: "Global Republic, mid-floor garment hanging displays and industrial mobile racks",
-      },
-      {
-        src: "/images/global-republic-mohali-04.jpg",
-        alt: "Global Republic, entrance vista showcasing merchandise zoning and track spotlights",
-      },
-      {
-        src: "/images/global-republic-mohali-05.jpg",
-        alt: "Global Republic, folded apparel modular shelving and full-length dressing mirrors",
-      },
+    images: [
+      "global-republic-mohali-01.jpg",
+      "global-republic-mohali-02.jpg",
+      "global-republic-mohali-03.jpg",
+      "global-republic-mohali-04.jpg",
+      "global-republic-mohali-05.jpg",
+    ],
+    imageAlts: [
+      "Global Republic, Mohali, storefront showcase with glass bays at Bestech",
+      "Global Republic, retail floor with bespoke natural wood wall bays and center islands",
+      "Global Republic, mid-floor garment hanging displays and industrial mobile racks",
+      "Global Republic, entrance vista showcasing merchandise zoning and track spotlights",
+      "Global Republic, folded apparel modular shelving and full-length dressing mirrors",
     ],
   },
   {
-    number: "05",
     slug: "global-republic-rajouri-garden",
     name: "Global Republic",
     location: "Rajouri Garden Main Market, Delhi",
-    area: "1,900 sq ft",
-    type: "Retail",
     category: "retail-stores",
-    scope: "Design + turnkey execution",
-    coverImage: "/images/global-republic-rajouri-garden-01.jpg",
-    coverAlt: "Global Republic, Rajouri Garden, flagship store entrance in Main Market, Delhi",
-    gallery: [
-      {
-        src: "/images/global-republic-rajouri-garden-02.jpg",
-        alt: "Global Republic, split-level retail space with custom industrial staircase and tall cabinetry",
-      },
-      {
-        src: "/images/global-republic-rajouri-garden-03.jpg",
-        alt: "Global Republic, double-height oak millwork display shelving under exposed concrete ceilings",
-      },
-      {
-        src: "/images/global-republic-rajouri-garden-04.jpg",
-        alt: "Global Republic, exposed white brick feature wall with wrought-iron globe pendant lights",
-      },
-      {
-        src: "/images/global-republic-rajouri-garden-05.jpg",
-        alt: "Global Republic, custom floor fixtures and tailored perimeter metal shelving system",
-      },
+    images: [
+      "global-republic-rajouri-garden-01.jpg",
+      "global-republic-rajouri-garden-02.jpg",
+      "global-republic-rajouri-garden-03.jpg",
+      "global-republic-rajouri-garden-04.jpg",
+      "global-republic-rajouri-garden-05.jpg",
+    ],
+    imageAlts: [
+      "Global Republic, Rajouri Garden, flagship store entrance in Main Market, Delhi",
+      "Global Republic, split-level retail space with custom industrial staircase and tall cabinetry",
+      "Global Republic, double-height oak millwork display shelving under exposed concrete ceilings",
+      "Global Republic, exposed white brick feature wall with wrought-iron globe pendant lights",
+      "Global Republic, custom floor fixtures and tailored perimeter metal shelving system",
     ],
   },
   {
-    number: "06",
     slug: "camla-gurgaon",
     name: "Camla",
     location: "Ambience Mall, Gurugram",
-    area: "2,950 sq ft",
-    type: "Retail",
     category: "retail-stores",
-    scope: "Design + turnkey execution",
-    coverImage: "/images/camla-gurgaon-01.jpg",
-    coverAlt: "Camla, Gurugram, store entrance with backlit signage at Ambience Mall",
-    gallery: [
-      {
-        src: "/images/camla-gurgaon-02.jpg",
-        alt: "Camla, concrete-finish architectural niche display with slatted wooden shelving",
-      },
-      {
-        src: "/images/camla-gurgaon-03.jpg",
-        alt: "Camla, minimalist tubular clothing racks and backlit brand lifestyle graphic",
-      },
-      {
-        src: "/images/camla-gurgaon-04.jpg",
-        alt: "Camla, curated apparel section with hand-carved baroque natural wood mirror",
-      },
-      {
-        src: "/images/camla-gurgaon-05.jpg",
-        alt: "Camla, structured denim wall modules with blue ombre feature backdrop",
-      },
+    images: [
+      "camla-gurgaon-01.jpg",
+      "camla-gurgaon-02.jpg",
+      "camla-gurgaon-03.jpg",
+      "camla-gurgaon-04.jpg",
+      "camla-gurgaon-05.jpg",
+    ],
+    imageAlts: [
+      "Camla, Gurugram, store entrance with backlit signage at Ambience Mall",
+      "Camla, concrete-finish architectural niche display with slatted wooden shelving",
+      "Camla, minimalist tubular clothing racks and backlit brand lifestyle graphic",
+      "Camla, curated apparel section with hand-carved baroque natural wood mirror",
+      "Camla, structured denim wall modules with blue ombre feature backdrop",
     ],
   },
   {
-    number: "07",
     slug: "madame-gwalior",
     name: "Madame",
     location: "City Centre, Gwalior",
-    area: "2,350 sq ft",
-    type: "Retail",
     category: "retail-stores",
-    scope: "Design + turnkey execution",
-    coverImage: "/images/madame-gwalior-01.jpg",
-    coverAlt: "Madame, Gwalior, storefront in City Centre with contemporary slatted canopy",
-    gallery: [
-      {
-        src: "/images/madame-gwalior-02.jpg",
-        alt: "Madame, apparel floor layout with glossy porcelain floor tiles and suspended spotlight rails",
-      },
-      {
-        src: "/images/madame-gwalior-03.jpg",
-        alt: "Madame, handbag and accessories island with modular white illuminated cubic pedestals",
-      },
-      {
-        src: "/images/madame-gwalior-04.jpg",
-        alt: "Madame, vertical column shelving and color-graded knitwear merchandise presentation",
-      },
+    images: [
+      "madame-gwalior-01.jpg",
+      "madame-gwalior-02.jpg",
+      "madame-gwalior-03.jpg",
+      "madame-gwalior-04.jpg",
+    ],
+    imageAlts: [
+      "Madame, Gwalior, storefront in City Centre with contemporary slatted canopy",
+      "Madame, apparel floor layout with glossy porcelain floor tiles and suspended spotlight rails",
+      "Madame, handbag and accessories island with modular white illuminated cubic pedestals",
+      "Madame, vertical column shelving and color-graded knitwear merchandise presentation",
     ],
   },
+  { slug: "anytime-fitness", name: "Anytime Fitness", location: "India", category: "gyms", images: [] },
+  { slug: "libas", name: "Libas", location: "India", category: "retail-stores", images: [] },
+  { slug: "manyavar", name: "Manyavar", location: "India", category: "retail-stores", images: [] },
+  { slug: "jockey", name: "Jockey", location: "India", category: "retail-stores", images: [] },
+  { slug: "paduka", name: "Paduka", location: "India", category: "retail-stores", images: [] },
+  { slug: "gypsy", name: "Gypsy", location: "India", category: "retail-stores", images: [] },
+  { slug: "shri-ram-hari-ram-jewellers", name: "Shri Ram Hari Ram Jewellers", location: "India", category: "retail-stores", images: [] },
+  { slug: "hp", name: "HP", location: "Vegas Mall, Dwarka, Delhi", category: "retail-stores", images: [] },
+  { slug: "kuber", name: "Kuber", location: "India", category: "retail-stores", images: [] },
+  { slug: "subhash-pro", name: "Subhash Pro", location: "Gwalior", category: "retail-stores", images: [] },
+  { slug: "anand-plaza-mart", name: "Anand Plaza Mart", location: "India", category: "retail-stores", images: [] },
+  { slug: "inara", name: "Inara", location: "Indore", category: "retail-stores", images: [] },
+  { slug: "raman-timber", name: "Raman Timber", location: "India", category: "retail-stores", images: [] },
+  { slug: "shagun-wooltex", name: "Shagun Wooltex", location: "India", category: "retail-stores", images: [] },
+  { slug: "topone", name: "TopOne", location: "Rajouri Garden, Delhi", category: "retail-stores", images: [] },
+  { slug: "tiara", name: "Tiara", location: "India", category: "retail-stores", images: [] },
 ];
+
+/** Projects with photos get a detail page and a clickable card. */
+export const hasPhotos = (p: Project) => p.images.length > 0;
+export const imageUrl = (file: string) => `/images/${file}`;
+export const imageAlt = (p: Project, i: number) => p.imageAlts?.[i] ?? `${p.name}, ${p.location}`;
 
 export const WORKSHOP_IMAGES = [
   {

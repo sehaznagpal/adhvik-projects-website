@@ -14,23 +14,32 @@
 }
 
 :root {
-  --bg-color: #F4F1EA;
-  --surface-color: #EAE5DA;
-  --text-color: #141414;
-  --muted-color: #6B6660;
-  --border-color: #D6D0C4;
-  --accent-color: #7A1E24;
+  --bg-base: #F4F1EA;
+  --surface-base: #EAE5DA;
+  --text-base: #141414;
+  --muted-base: #6B6660;
+  --border-base: #D6D0C4;
+  --accent-base: #7A1E24;
   --accent-fill: #7A1E24;
   --on-accent: #F4F1EA;
+
+  /* 0 = normal page colours, 1 = maroon About section (set from scroll in AboutIntro) */
+  --shift: 0;
+  --bg-color: color-mix(in srgb, #4A1418 calc(var(--shift) * 100%), var(--bg-base));
+  --surface-color: color-mix(in srgb, #5C1E23 calc(var(--shift) * 100%), var(--surface-base));
+  --text-color: color-mix(in srgb, #F4F1EA calc(var(--shift) * 100%), var(--text-base));
+  --muted-color: color-mix(in srgb, #C1AFAB calc(var(--shift) * 100%), var(--muted-base));
+  --border-color: color-mix(in srgb, #6A2A2F calc(var(--shift) * 100%), var(--border-base));
+  --accent-color: color-mix(in srgb, #E7A9AC calc(var(--shift) * 100%), var(--accent-base));
 }
 
 html.dark {
-  --bg-color: #120D0D;
-  --surface-color: #1C1414;
-  --text-color: #EFE9E4;
-  --muted-color: #A0948F;
-  --border-color: #2E2222;
-  --accent-color: #D98A8E;
+  --bg-base: #120D0D;
+  --surface-base: #1C1414;
+  --text-base: #EFE9E4;
+  --muted-base: #A0948F;
+  --border-base: #2E2222;
+  --accent-base: #D98A8E;
 }
 
 html {
@@ -48,6 +57,14 @@ body {
   line-height: 1.6;
   font-variant-numeric: lining-nums;
   transition: background-color 300ms cubic-bezier(0.16, 1, 0.3, 1), color 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reduced motion: the About colour change is a short 200ms fade, not a scrub */
+html.shift-fade,
+html.shift-fade body,
+html.shift-fade header,
+html.shift-fade .app-root {
+  transition-duration: 200ms !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -87,7 +104,6 @@ body {
 /* Lining, tabular figures for counters, numbers and the ticker */
 .tabular-nums,
 .font-mono,
-.animate-ticker,
 .loader-percent,
 a[href^="tel:"] {
   font-variant-numeric: lining-nums tabular-nums;
@@ -183,31 +199,21 @@ a[href^="tel:"] {
   border-color: var(--border-color);
 }
 
-/* Ticker Marquee animation */
-@keyframes ticker {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+/* Brand strip: one steady speed, seamless loop (translate 0 to -50%), right to left */
+@keyframes brand-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
-
-.animate-ticker {
-  display: flex;
+.brand-marquee-track {
   width: max-content;
-  animation: ticker 38s linear infinite;
+  animation: brand-marquee 60s linear infinite;
+  font-variant-numeric: lining-nums tabular-nums;
 }
-
-.animate-ticker:hover {
-  animation-play-state: paused;
-}
-
+.brand-marquee:hover .brand-marquee-track { animation-play-state: paused; }
+.brand-static { display: none; }
 @media (prefers-reduced-motion: reduce) {
-  .animate-ticker {
-    animation: none;
-    overflow-x: auto;
-  }
+  .brand-marquee { display: none; }
+  .brand-static { display: flex; }
 }
 
 /* Hide scrollbar for clean horizontal photo strip */
@@ -223,7 +229,7 @@ a[href^="tel:"] {
 .about-unit {
   --t: 1;
   display: inline-block;
-  opacity: calc(0.15 + 0.85 * var(--t));
+  opacity: calc(0.2 + 0.8 * var(--t));
   will-change: opacity;
 }
 .about-key {

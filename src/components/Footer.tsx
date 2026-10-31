@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CONTACT_INFO } from '../data/projects';
 import { TAGLINE, DESCRIPTOR } from '../data/brand';
+import { Wordmark } from './Wordmark';
 import { Check, Copy } from 'lucide-react';
 
 interface FooterProps {
@@ -134,8 +135,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </button>
           </nav>
 
-          {/* Copyright */}
-          <div className="text-xs">
+          {/* Wordmark + copyright */}
+          <div className="flex flex-col items-start gap-2 lg:items-end text-xs">
+            <span className="text-xl text-[var(--text-color)]"><Wordmark /></span>
             © 2026 Adhvik Projects · {DESCRIPTOR}. All rights reserved.
           </div>
         </div>

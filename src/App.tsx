@@ -152,7 +152,7 @@ export default function App() {
   }, [route.isWorkScroll]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--bg-color)] text-[var(--text-color)] transition-colors duration-300">
+    <div className="app-root min-h-screen flex flex-col bg-[var(--bg-color)] text-[var(--text-color)] transition-colors duration-300">
       {showIntro && <Loader imageSrcs={HERO_SRCS} onDone={handleIntroDone} />}
 
       {/* Navigation on every page */}

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { PROJECTS, Project } from '../data/projects';
+import React, { useEffect, useState } from 'react';
+import { PROJECTS, Project, hasPhotos, imageUrl, imageAlt } from '../data/projects';
+import { categoryName } from '../data/categories';
 import { Lightbox, LightboxImage } from '../components/Lightbox';
 
 interface ProjectDetailProps {
@@ -11,8 +12,17 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ slug, onNavigate }
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [activePhotoIndex, setActivePhotoIndex] = useState(0);
 
-  const currentIndex = PROJECTS.findIndex((p) => p.slug === slug);
-  const project: Project | undefined = PROJECTS[currentIndex];
+  // Only projects with photos have a detail page
+  const detailProjects = PROJECTS.filter(hasPhotos);
+  const currentIndex = detailProjects.findIndex((p) => p.slug === slug);
+  const project: Project | undefined = detailProjects[currentIndex];
+  const isTextOnly = PROJECTS.some((p) => p.slug === slug && !hasPhotos(p));
+
+  useEffect(() => {
+    if (isTextOnly) onNavigate('/', true);
+  }, [isTextOnly, onNavigate]);
+
+  if (isTextOnly) return null;
 
   if (!project) {
     return (
@@ -40,18 +50,17 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ slug, onNavigate }
   }
 
   // Next project logic (looping from last to first)
-  const nextProjectIndex = (currentIndex + 1) % PROJECTS.length;
-  const nextProject = PROJECTS[nextProjectIndex];
+  const nextProjectIndex = (currentIndex + 1) % detailProjects.length;
+  const nextProject = detailProjects[nextProjectIndex];
 
-  // All images for lightbox (cover + gallery)
-  const allImages: LightboxImage[] = [
-    { src: project.coverImage, alt: project.coverAlt, caption: `${project.name}, Façade and Cover` },
-    ...project.gallery.map((g) => ({
-      src: g.src,
-      alt: g.alt,
-      caption: g.alt,
-    })),
-  ];
+  // All images for lightbox (first image is the cover)
+  const allImages: LightboxImage[] = project.images.map((file, i) => ({
+    src: imageUrl(file),
+    alt: imageAlt(project, i),
+    caption: imageAlt(project, i),
+  }));
+  const coverAlt = imageAlt(project, 0);
+  const gallery = allImages.slice(1);
 
   const handleOpenLightbox = (index: number) => {
     setActivePhotoIndex(index);
@@ -75,28 +84,20 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ slug, onNavigate }
         {/* Project Header */}
         <div className="mb-10 md:mb-14">
           <div className="flex items-center gap-3 text-xs md:text-sm font-mono text-[var(--muted-color)] uppercase tracking-[0.08em] mb-3">
-            <span>{project.number}</span>
+            <span>{String(currentIndex + 1).padStart(2, '0')}</span>
             <span aria-hidden="true">/</span>
-            <span>08</span>
+            <span>{String(detailProjects.length).padStart(2, '0')}</span>
           </div>
 
           <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.02em] text-[var(--text-color)] uppercase leading-[0.9] mb-6">
             {project.name}
           </h1>
 
-          {/* Meta Row: Location · Area · Type · Scope */}
+          {/* Meta Row: Location · Category */}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs sm:text-sm md:text-base text-[var(--muted-color)] border-t border-b border-[var(--border-color)] py-4">
             <span className="text-[var(--text-color)] font-medium">{project.location}</span>
             <span aria-hidden="true" className="text-[var(--border-color)]">·</span>
-            <span>{project.area}</span>
-            <span aria-hidden="true" className="text-[var(--border-color)]">·</span>
-            <span className="text-[var(--text-color)] font-medium">{project.type}</span>
-            {project.scope && (
-              <>
-                <span aria-hidden="true" className="text-[var(--border-color)]">·</span>
-                <span className="text-[var(--muted-color)]">{project.scope}</span>
-              </>
-            )}
+            <span className="text-[var(--text-color)] font-medium">{categoryName(project.category)}</span>
           </div>
         </div>
 
@@ -109,29 +110,29 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ slug, onNavigate }
           >
             <div className="aspect-[16/9] w-full bg-[var(--surface-color)] overflow-hidden relative cursor-zoom-in">
               <img
-                src={project.coverImage}
-                alt={project.coverAlt}
+                src={imageUrl(project.images[0])}
+                alt={coverAlt}
                 loading="eager"
                 className="w-full h-full object-cover transition-transform duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
               />
             </div>
             <div className="mt-2.5 flex items-center justify-between text-xs text-[var(--muted-color)]">
-              <span>{project.coverAlt}</span>
+              <span>{coverAlt}</span>
               <span className="uppercase tracking-[0.08em] font-mono">01 / {String(allImages.length).padStart(2, '0')}</span>
             </div>
           </button>
         </div>
 
         {/* Remaining Gallery Photos (2-Column Grid on desktop, 1 on mobile) */}
-        {project.gallery.length > 0 && (
+        {gallery.length > 0 && (
           <div className="mb-20 md:mb-28">
             <div className="mb-6 flex flex-col items-start gap-2 lg:flex-row lg:items-center lg:justify-between text-xs uppercase tracking-[0.08em] text-[var(--muted-color)]">
               <span>Gallery</span>
-              <span>{project.gallery.length} Additional Perspectives</span>
+              <span>{gallery.length} Additional Perspectives</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-              {project.gallery.map((item, idx) => {
+              {gallery.map((item, idx) => {
                 const photoIndex = idx + 1;
                 return (
                   <button
