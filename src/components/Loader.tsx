@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Wordmark } from './Wordmark';
 
 interface LoaderProps {
@@ -20,6 +20,25 @@ export const Loader: React.FC<LoaderProps> = ({ imageSrcs, onDone }) => {
   const reduced = useRef(
     typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
   ).current;
+
+  // Fit the wordmark to 85% of the viewport width (never larger than its CSS size)
+  const markRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const fit = () => {
+      const el = markRef.current?.firstElementChild as HTMLElement | null;
+      if (!el) return;
+      el.style.fontSize = '';
+      const max = window.innerWidth * 0.85;
+      const w = el.getBoundingClientRect().width;
+      if (w > max) {
+        el.style.fontSize = `${(parseFloat(getComputedStyle(el).fontSize) * max) / w}px`;
+      }
+    };
+    fit();
+    document.fonts?.ready.then(fit);
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
+  }, []);
 
   // Lock scroll while the loader is visible
   useEffect(() => {
@@ -121,7 +140,9 @@ export const Loader: React.FC<LoaderProps> = ({ imageSrcs, onDone }) => {
       aria-hidden="true"
       className={`loader ${exiting ? (reduced ? 'loader-fade' : 'loader-exit') : ''}`}
     >
-      <Wordmark animated={!reduced} showLine className="loader-wordmark" />
+      <div ref={markRef} className="flex max-w-full justify-center">
+        <Wordmark animated={!reduced} showLine className="loader-wordmark" />
+      </div>
       <div className="loader-percent">{percent}%</div>
       <button
         type="button"
