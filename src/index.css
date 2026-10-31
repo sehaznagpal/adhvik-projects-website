@@ -721,6 +721,7 @@ html.dark .client-card { box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
     flex-direction: column;
     box-sizing: border-box;
   }
+  .about-steps { position: relative; top: -25px; }
   .about-hero-inner { flex: 1; justify-content: space-between; gap: clamp(20px, 3vh, 40px); }
 }
 .about-hero-title.section-heading {
@@ -748,9 +749,12 @@ html.dark .client-card { box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
   .about-step:first-child { padding-left: 0; border-left: 0; }
   .about-step:last-child { padding-right: 0; }
 }
-.about-step-num { font-size: 13px; font-weight: 500; color: #E7A9AC; font-variant-numeric: lining-nums; }
 .about-step-title {
-  margin: 8px 0 12px;
+  margin: 0 0 12px;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.3em;
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 300;
@@ -758,6 +762,7 @@ html.dark .client-card { box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
   font-size: 32px;
   line-height: 1.15;
 }
+.about-step-num { color: #E7A9AC; font-variant-numeric: lining-nums; }
 .about-step-text { margin: 0; font-size: 16px; line-height: 1.55; color: rgba(244, 241, 234, 0.8); }
 
 /* Stats as tilted cards, like the client cards on the home page */
@@ -811,6 +816,14 @@ html.dark .client-card { box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
 .team-wrap { position: relative; }
 .team-flow { position: relative; display: grid; grid-template-columns: 1fr; gap: 40px; padding-left: 32px; }
 @media (min-width: 900px) { .team-flow { grid-template-columns: repeat(4, 1fr); gap: 24px; padding-left: 0; width: 100%; max-width: 1032px; margin-inline: auto; } }
+@media (min-width: 1024px) {
+  .team-flow {
+    grid-template-columns: repeat(4, max-content);
+    column-gap: clamp(64px, 9vw, 160px);
+    justify-content: center;
+    max-width: none;
+  }
+}
 .team-line {
   position: absolute;
   background: color-mix(in srgb, var(--text-color) 25%, transparent);

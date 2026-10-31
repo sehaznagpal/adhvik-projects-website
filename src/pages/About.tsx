@@ -149,8 +149,10 @@ export const About: React.FC = () => {
           <div ref={stepsRef} className="about-steps">
             {STEPS.map((s, i) => (
               <div key={s.n} data-reveal className="about-step reveal" style={{ ['--d' as string]: `${i * 100}ms` }}>
-                <span className="about-step-num">{s.n}</span>
-                <h2 className="about-step-title">{s.title}</h2>
+                <h2 className="about-step-title">
+                  <span className="about-step-num">{s.n}</span>
+                  <span>{s.title}</span>
+                </h2>
                 <p className="about-step-text">{s.text}</p>
               </div>
             ))}
